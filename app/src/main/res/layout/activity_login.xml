@@ -14,9 +14,9 @@
     <!-- Logo Start-->
     <ImageView
         android:id="@+id/iv_logo_login"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="140dp"
+        android:layout_height="156dp"
+        android:layout_marginTop="72dp"
         android:src="@drawable/qms_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/prompt_username"
         android:selectAllOnFocus="true"
@@ -62,6 +62,7 @@
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
         android:text="@string/login"
+        android:textSize="16sp"
         app:backgroundTint="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,9 +93,10 @@
         android:layout_marginStart="106dp"
         android:layout_marginLeft="106dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="185dp"
-        android:layout_marginRight="185dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginRight="182dp"
         android:text="@string/not_registered_yet"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_cust_login" />
@@ -107,6 +109,7 @@
         android:layout_marginLeft="5dp"
         android:text="@string/register_now"
         android:textColor="@color/teal_700"
+        android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/tv_cust_text1"
         app:layout_constraintTop_toTopOf="@+id/tv_cust_text1" />
 
