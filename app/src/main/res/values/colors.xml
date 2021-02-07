@@ -24,4 +24,10 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
+
+    <!--  Latest color palette  -->
+    <color name="beige_200">#FFFDF8</color>
+    <color name="salmon_500">#FF474A</color>
+    <color name="indigo_700">#1C255E</color>
+    <color name="grey_500">#666666</color>
 </resources>

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DB_REGISTER = "register.db";
+    public static final String DB = "qms.db";
     public static final String REGISTERED_USERS = "registeredUsers";
     public static final String COL_ID = "ID";
     public static final String COL_EMAIL = "EMAIL";
@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PASSWORD = "PASSWORD";
 
     public DatabaseHelper(@Nullable Context context) {
-        super(context, DB_REGISTER, null, 1);
+        super(context, DB, null, 1);
     }
 
     @Override
