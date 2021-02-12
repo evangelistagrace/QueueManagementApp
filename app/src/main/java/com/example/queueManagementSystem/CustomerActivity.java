@@ -1,7 +1,6 @@
 package com.example.queueManagementSystem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,11 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class CustomerActivity extends AppCompatActivity {
     private ActionBar toolbar;
 
     @Override
@@ -21,12 +19,12 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.customer_activity);
 
         toolbar = getSupportActionBar();
         toolbar.setTitle("Home");
 
-        fragment = new CustomerHome();
+        fragment = new CustomerHomeFragment();
         loadFragment(fragment);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -38,20 +36,18 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_home:
                         toolbar.setTitle("Home");
-                        fragment = new CustomerHome();
+                        fragment = new CustomerHomeFragment();
                         loadFragment(fragment);
                         return true;
                     case R.id.action_tickets:
                         toolbar.setTitle("Tickets");
-                        fragment = new CustomerTicket();
+                        fragment = new CustomerTicketFragment();
                         loadFragment(fragment);
-//                        Toast.makeText(MainActivity.this, "Tickets", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.action_profile:
                         toolbar.setTitle("Profile");
-                        fragment = new CustomerProfile();
+                        fragment = new CustomerProfileFragment();
                         loadFragment(fragment);
-//                        Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
                         return true;
                 }
                 return false;

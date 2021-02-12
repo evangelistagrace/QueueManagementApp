@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CustomerProfile#newInstance} factory method to
+ * Use the {@link CustomerTicketFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CustomerProfile extends Fragment {
+public class CustomerTicketFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +24,7 @@ public class CustomerProfile extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public CustomerProfile() {
+    public CustomerTicketFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +34,11 @@ public class CustomerProfile extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment customer_profile.
+     * @return A new instance of fragment customer_ticket.
      */
     // TODO: Rename and change types and number of parameters
-    public static CustomerProfile newInstance(String param1, String param2) {
-        CustomerProfile fragment = new CustomerProfile();
+    public static CustomerTicketFragment newInstance(String param1, String param2) {
+        CustomerTicketFragment fragment = new CustomerTicketFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +59,6 @@ public class CustomerProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer_profile, container, false);
+        return inflater.inflate(R.layout.customer_ticket_fragment, container, false);
     }
 }
