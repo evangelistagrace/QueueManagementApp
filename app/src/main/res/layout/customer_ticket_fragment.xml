@@ -26,6 +26,7 @@
             android:fontFamily="@font/kollektif"
             android:gravity="center"
             android:text="@string/cust_ticket_text_1"
+            android:textColor="@color/indigo_500"
             android:textSize="28sp"
             app:lineHeight="30sp" />
 
@@ -78,6 +79,7 @@
             android:fontFamily="@font/kollektif"
             android:gravity="center"
             android:text="@string/cust_ticket_text_2"
+            android:textColor="@color/indigo_500"
             android:textSize="24sp"
             app:lineHeight="30sp" />
 

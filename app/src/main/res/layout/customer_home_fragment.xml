@@ -25,7 +25,7 @@
             android:fontFamily="@font/kollektif"
             android:gravity="center"
             android:text="@string/cust_home_text_1"
-            android:textColor="@color/indigo_700"
+            android:textColor="@color/indigo_500"
             android:textSize="28sp" />
 
     </FrameLayout>

@@ -31,4 +31,7 @@
     <string name="customers">Customers</string>
     <string name="profile">Profile</string>
     <string name="insights">Insights</string>
+    <string name="plus_symbol">+</string>
+    <string name="running">Running</string>
+    <string name="stopped">Stopped</string>
 </resources>

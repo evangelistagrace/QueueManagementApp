@@ -11,4 +11,7 @@
     <color name="salmon_500">#FF474A</color>
     <color name="indigo_700">#1C255E</color>
     <color name="grey_500">#666666</color>
+    <color name="grey_100">#17666666</color>
+    <color name="indigo_200">#B31C255E</color>
+    <color name="indigo_500">#E61C255E</color>
 </resources>

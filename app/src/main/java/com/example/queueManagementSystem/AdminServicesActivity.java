@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,8 +28,8 @@ public class AdminServicesActivity extends AppCompatActivity {
 
         // init components
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_services_navigation);
-        Button btnService1 = findViewById(R.id.btnService1);
-        Button btnService2 = findViewById(R.id.btnService2);
+        TextView tvService1 = findViewById(R.id.tvService1);
+        TextView tvService2 = findViewById(R.id.tvService2);
 
         toolbar = getSupportActionBar();
         toolbar.setTitle("Services");
@@ -36,7 +37,7 @@ public class AdminServicesActivity extends AppCompatActivity {
         // set actions for admin service menu
 
         // service 1
-        btnService1.setOnClickListener(new View.OnClickListener() {
+        tvService1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment;
@@ -48,7 +49,7 @@ public class AdminServicesActivity extends AppCompatActivity {
         });
 
         // service 2
-        btnService2.setOnClickListener(new View.OnClickListener() {
+        tvService2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment;
