@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,7 +32,7 @@ public class AdminActivity extends AppCompatActivity {
         Button btnCustomers = findViewById(R.id.btnCustomers);
 
         toolbar = getSupportActionBar();
-        toolbar.setTitle("Home");
+        toolbar.setTitle("Admin Panel");
 
         // set actions for admin home menu
         // services
