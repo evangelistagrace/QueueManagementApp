@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -16,16 +17,12 @@ public class CustomerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Fragment fragment;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.customer_activity);
 
         toolbar = getSupportActionBar();
         toolbar.setTitle("Home");
-
-        fragment = new CustomerHomeFragment();
-        loadFragment(fragment);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -36,8 +33,7 @@ public class CustomerActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_home:
                         toolbar.setTitle("Home");
-                        fragment = new CustomerHomeFragment();
-                        loadFragment(fragment);
+                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         return true;
                     case R.id.action_tickets:
                         toolbar.setTitle("Tickets");
@@ -58,7 +54,7 @@ public class CustomerActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_container, fragment);
+        transaction.replace(R.id.customer_fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/beige_200"
     tools:context=".CustomerTicketFragment">
 
     <FrameLayout
@@ -16,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerTicketFragment">
 
         <TextView
             android:layout_width="270dp"
@@ -39,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el1"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerTicketFragment">
 
         <TextView
             android:layout_width="100dp"
@@ -68,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el2"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerTicketFragment">
 
         <TextView
             android:layout_width="270dp"
@@ -90,9 +92,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el3"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerTicketFragment">
 
         <Button
+            android:id="@+id/btnLeaveQueue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner_with_stroke_bg"
@@ -106,23 +109,5 @@
             app:strokeWidth="2dp" />
 
     </FrameLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="71dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="341dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="662dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QueueManagementSystem">
+        <activity android:name=".AdminServicesActivity"></activity>
+        <activity android:name=".AdminActivity" />
         <activity android:name=".CustomerActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">

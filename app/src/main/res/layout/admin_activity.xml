@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <!--    Begin replaceable fragment content    -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/customer_fragment_container"
+        android:id="@+id/admin_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/beige_200"
-        tools:context=".CustomerActivity">
+        tools:context=".AdminActivity">
 
         <FrameLayout
             android:id="@+id/el1"
@@ -23,14 +24,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:context=".CustomerActivity">
+            tools:context=".AdminActivity">
 
             <TextView
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/kollektif"
                 android:gravity="center"
-                android:text="@string/cust_home_text_1"
+                android:text="@string/admin_panel"
                 android:textColor="@color/indigo_700"
                 android:textSize="28sp" />
 
@@ -46,17 +47,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/el1"
             app:layout_constraintVertical_bias="0.0"
-            tools:context=".CustomerActivity">
+            tools:context=".AdminActivity">
 
             <Button
+                android:id="@+id/btnServices"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/loans"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/services"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
 
@@ -70,17 +71,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/el2"
             app:layout_constraintVertical_bias="0.0"
-            tools:context=".CustomerActivity">
+            tools:context=".AdminActivity">
 
             <Button
+                android:id="@+id/btnQueues"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/accounts"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/queues"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
 
@@ -93,19 +94,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/el3"
             app:layout_constraintVertical_bias="0.0"
-            tools:context=".CustomerActivity">
+            tools:context=".AdminActivity">
 
             <Button
+                android:id="@+id/btnCustomers"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/payments"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/customers"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -114,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/indigo_700"
-        app:menu="@menu/customer_bottom_menu"
+        app:menu="@menu/admin_bottom_menu"
         app:itemIconTint="@color/beige_200"
         app:itemTextColor="@color/beige_200"
         />

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige_200"
-    tools:context=".CustomerProfileFragment">
+    tools:context=".AdminProfileFragment">
 
     <FrameLayout
         android:id="@+id/el1"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerProfileFragment">
+        tools:context=".AdminProfileFragment">
 
         <TextView
             android:layout_width="270dp"
