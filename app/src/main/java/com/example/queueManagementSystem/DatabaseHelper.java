@@ -17,6 +17,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PASSWORD = "PASSWORD";
     public static final String COL_ADMIN = "IS_ADMIN";
 
+    public static final String TABLE_SERVICES = "services";
+    public static final String COL_SERVICE_NAME = "SERVICE_NAME";
+    public static final String COL_SERVICE_NUM_COUNTERS = "SERVICE_NUM_COUNTERS";
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB, null, 1);
     }
@@ -29,6 +33,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_USERNAME + " TEXT, " +
                 COL_PASSWORD + " TEXT, " +
                 COL_ADMIN + " INTEGER" +
+                ")");
+
+        db.execSQL("CREATE TABLE " + TABLE_SERVICES +
+                " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_SERVICE_NAME + " TEXT, " +
+                COL_SERVICE_NUM_COUNTERS + " INTEGER" +
                 ")");
     }
 
@@ -97,6 +107,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+
+    // SERVICES
+    public long addService (String serviceName, Integer numOfCounters) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("service_name", serviceName);
+        cv.put("service_num_counters", numOfCounters);
+        long res = db.insert(TABLE_SERVICES, null, cv);
+        db.close();
+        return res;
+    }
+
+    public Cursor getServices () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_SERVICE_NAME };
+//        String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?" + " and " + COL_ADMIN + "=" + 1;
+//        String[] selectionArgs = { username, password};
+
+        Cursor cursor = db.query(TABLE_SERVICES, columns, null, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
     }
 
 

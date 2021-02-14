@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.FragmentManager;
-import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AdminServicesActivity extends AppCompatActivity {
     private ActionBar toolbar;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +26,12 @@ public class AdminServicesActivity extends AppCompatActivity {
         setContentView(R.layout.admin_services_activity);
 
         // init components
+        db = new DatabaseHelper(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_services_navigation);
         TextView tvService1 = findViewById(R.id.tvService1);
         TextView tvService2 = findViewById(R.id.tvService2);
+        TextView tvAddService = findViewById(R.id.tvAddService);
+        TextView tvDisplayServices = findViewById(R.id.tvDisplayServices);
 
         toolbar = getSupportActionBar();
         toolbar.setTitle("Services");
@@ -42,7 +44,7 @@ public class AdminServicesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Fragment fragment;
                 toolbar.setTitle("Service 1");
-                fragment = new AdminInsightFragment();
+                fragment = new AdminServiceSettingsFragment();
                 loadFragment(fragment);
                 return;
             }
@@ -59,6 +61,32 @@ public class AdminServicesActivity extends AppCompatActivity {
                 return;
             }
         });
+
+        tvAddService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment;
+                toolbar.setTitle("Add Service");
+                fragment = new AdminAddServiceFragment();
+                loadFragment(fragment);
+                return;
+            }
+        });
+
+        // test display services
+        String serviceNames = "";
+        Cursor cursor = db.getServices();
+
+        if (cursor.moveToFirst()) {
+            do {
+                serviceNames += cursor.getString(0) + "\n";
+
+            } while (cursor.moveToNext());
+        }
+
+        tvDisplayServices.setText(serviceNames);
+
+
 
         // set actions for bottom menu
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
