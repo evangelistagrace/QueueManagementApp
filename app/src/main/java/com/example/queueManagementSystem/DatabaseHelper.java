@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DB = "qms.db";
+
+    //USERS
     public static final String REGISTERED_USERS = "users";
     public static final String COL_ID = "ID";
     public static final String COL_EMAIL = "EMAIL";
@@ -17,9 +19,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PASSWORD = "PASSWORD";
     public static final String COL_ADMIN = "IS_ADMIN";
 
+    //SERVICES
     public static final String TABLE_SERVICES = "services";
     public static final String COL_SERVICE_NAME = "SERVICE_NAME";
-    public static final String COL_SERVICE_NUM_COUNTERS = "SERVICE_NUM_COUNTERS";
+
+    //COUNTERS
+    public static final String TABLE_COUNTERS = "counters";
+    public static final String COL_COUNTER_NAME = "COUNTER_NAME";
+    public static final String COL_SERVICE_ID = "SERVICE_ID";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB, null, 1);
@@ -27,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // create tables here
         db.execSQL("CREATE TABLE " + REGISTERED_USERS +
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_EMAIL + " TEXT, " +
@@ -37,8 +45,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_SERVICES +
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_SERVICE_NAME + " TEXT, " +
-                COL_SERVICE_NUM_COUNTERS + " INTEGER" +
+                COL_SERVICE_NAME + " TEXT" +
+                ")");
+
+        db.execSQL("CREATE TABLE " + TABLE_COUNTERS +
+                " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_COUNTER_NAME + " TEXT, " +
+                COL_SERVICE_ID + " INTEGER" +
                 ")");
     }
 
@@ -110,11 +123,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // SERVICES
-    public long addService (String serviceName, Integer numOfCounters) {
+    public long addService (String serviceName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("service_name", serviceName);
-        cv.put("service_num_counters", numOfCounters);
         long res = db.insert(TABLE_SERVICES, null, cv);
         db.close();
         return res;
@@ -122,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getServices () {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = { COL_SERVICE_NAME };
+        String[] columns = { COL_ID, COL_SERVICE_NAME };
 //        String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?" + " and " + COL_ADMIN + "=" + 1;
 //        String[] selectionArgs = { username, password};
 
@@ -132,6 +144,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+
+    // COUNTERS
+    public long addCounter (String counterName, Integer serviceId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("counter_name", counterName);
+        cv.put("service_id", serviceId);
+        long res = db.insert(TABLE_COUNTERS, null, cv);
+        db.close();
+        return res;
+    }
+
+    public Cursor getCounters (int serviceId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_ID, COL_COUNTER_NAME };
+        String selection = COL_SERVICE_ID + "=?";
+        String[] selectionArgs = { String.valueOf(serviceId) };
+
+        Cursor cursor = db.query(TABLE_COUNTERS, columns, selection, selectionArgs, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
 
 
 }

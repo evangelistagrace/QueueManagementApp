@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.FragmentManager;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,10 @@ public class CustomerActivity extends AppCompatActivity {
     private ActionBar toolbar;
     protected static ArrayList<Service> services = new ArrayList<>();
     Button btnServiceLoans, btnServiceAccounts, btnServicePayments;
+    DatabaseHelper db;
+    Customer customer;
+    Intent currentIntent;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,34 +35,47 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.customer_activity);
 
         // add code after this line
+        //init components
+        db = new DatabaseHelper(this);
         btnServiceLoans = findViewById(R.id.btnServiceLoans);
         btnServiceAccounts = findViewById(R.id.btnServiceAccounts);
-
         toolbar = getSupportActionBar();
+        currentIntent = getIntent();
+
 //        toolbar.setTitle("Home");
 
-        // start background processes
-        services.add(new Service(1, "Service 1"));
-        services.add(new Service(2, "Service 2"));
-        for (Service service: services) {
-            service.startCounters();
+        //instantiate customer
+        username = currentIntent.getStringExtra("USERNAME");
+        customer = new Customer(username);
+
+        Toast.makeText(CustomerActivity.this, "Welcome " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+
+
+        // instantiate services
+        Cursor cursor = db.getServices();
+
+        if (cursor.moveToFirst()) {
+            do {
+                services.add(new Service(cursor.getInt(0), cursor.getString(1)));
+            } while (cursor.moveToNext());
         }
 
+        // instantiate and start counters
+        for (Service service: services) {
+            startCounters(service);
+        }
+
+        // SERVICE MENU
        btnServiceLoans.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Customer customer = new Customer("grace");
                customer.sendTicketRequest(customer, 1); //assume customer had clicked on a service with service id 1
-               Toast.makeText(CustomerActivity.this, "new ticket requested!", Toast.LENGTH_SHORT).show();
+               Toast.makeText(CustomerActivity.this, "new ticket requested by " + customer.getUsername(), Toast.LENGTH_SHORT).show();
            }
        });
 
-//        Customer customer = new Customer("grace");
-//        Customer customer2 = new Customer("anna");
-//        customer.sendTicketRequest(customer, 1); //assume customer had clicked on a service with service id 1
-//        customer2.sendTicketRequest(customer2, 1);
 
-
+        // BOTTOM NAVIGATION
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,6 +89,8 @@ public class CustomerActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_tickets:
 //                        toolbar.setTitle("Tickets");
+                        // load customer object into intent before loading fragment
+                        currentIntent.putExtra("customerObject", customer);
                         fragment = new CustomerTicketFragment();
                         loadFragment(fragment);
                         return true;
@@ -86,6 +107,29 @@ public class CustomerActivity extends AppCompatActivity {
 
     public static ArrayList<Service> getServices() {
         return services;
+    }
+
+    public void startCounters(Service service) {
+        ArrayList<Counter> counters;
+        // get services from db
+        Cursor cursor = db.getCounters(service.getServiceId());
+
+        // instantiate counters
+        if (cursor.moveToFirst()) {
+            do {
+                service.addCounter(new Counter(cursor.getInt(0), cursor.getString(1), true, service));
+
+            } while (cursor.moveToNext());
+        }
+
+        counters = service.getCounters();
+
+        // start counters
+        for (Counter counter: counters) {
+            if (counter.open()) {
+                counter.getQueueManager().run();
+            }
+        }
     }
 
     private void loadFragment(Fragment fragment) {

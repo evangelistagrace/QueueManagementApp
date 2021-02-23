@@ -79,7 +79,7 @@ public class AdminServicesActivity extends AppCompatActivity {
 
         if (cursor.moveToFirst()) {
             do {
-                serviceNames += cursor.getString(0) + "\n";
+                serviceNames += "Service name: " + cursor.getString(1) + " Service id: " + cursor.getInt(0) + "\n";
 
             } while (cursor.moveToNext());
         }

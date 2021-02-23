@@ -1,5 +1,6 @@
 package com.example.queueManagementSystem;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -58,6 +59,8 @@ public class CustomerTicketFragment extends Fragment {
     }
 
     View view;
+    Customer customer;
+    Intent currentIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +68,12 @@ public class CustomerTicketFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.customer_ticket_fragment, container, false);
 
+        //init components
         Button btnLeaveQueue = (Button) view.findViewById(R.id.btnLeaveQueue);
+        currentIntent = getActivity().getIntent();
+        customer = (Customer) currentIntent.getSerializableExtra("customerObject");
+
+        Toast.makeText(getActivity(), "Welcome again " + customer.getUsername(), Toast.LENGTH_SHORT).show();
 
         btnLeaveQueue.setOnClickListener(new View.OnClickListener() {
             @Override

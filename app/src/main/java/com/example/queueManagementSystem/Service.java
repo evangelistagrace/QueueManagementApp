@@ -17,23 +17,12 @@ public class Service {
         return this.counters.get(index);
     }
 
+    public void addCounter(Counter counter) {
+        this.counters.add(counter);
+    }
 
-    public void startCounters() {
-        // query db for counetrs associated with the service id and add to counetrs list
-        // but for now we're just setting some dummy counters based on the service name
-        if (this.serviceName.equals("Service 1")) {
-            this.counters.add(new Counter(11, "Counter 1", true, this));
-        }
-
-        if (this.serviceName.equals("Service 2")) {
-            this.counters.add(new Counter(12, "Counter 2", true, this));
-        }
-
-        for (Counter counter: this.counters) {
-            if (counter.open()) {
-                counter.getQueueManager().run();
-            }
-        }
+    public ArrayList<Counter> getCounters() {
+        return this.counters;
     }
 
     public int getServiceId() {

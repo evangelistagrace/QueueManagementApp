@@ -28,7 +28,7 @@ public class QueueManager {
     public Ticket generateTicket() {
         int counterNum = this.counter.getId();
         long lastTicketNumber = getLastTicketNumber();
-        Long ticketNum = Long.parseLong(String.valueOf(counterNum) + String.valueOf(lastTicketNumber));
+        Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
         return new Ticket(111, counterNum, ticketNum); //ticket created with random time interval assigned
     }
 

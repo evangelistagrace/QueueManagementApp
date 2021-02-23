@@ -1,8 +1,9 @@
 package com.example.queueManagementSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Customer {
+public class Customer implements Serializable {
     String username;
     boolean isInQueue;
     Ticket ticket;
@@ -15,19 +16,13 @@ public class Customer {
 
     public void sendTicketRequest(Customer customer, int serviceId) {
         final ArrayList<Service> services = CustomerActivity.getServices();
-        // instantiate service object
-        // query if service exist in db
-        // if service exists, get number of counters
-        // assign customer to one counter randomly
-        // get the assigned counter's id, and other details necessary for instantiating a counter object
-        // call the counter's queuemanager's handleTicketRequest method
-        // the handleTicketRequest method will accept parameters for
+
         for (Service service: services) {
             int randomIndex = 0; //hardcoded for now to take the first counter
             Counter counter;
             if (service.getServiceId() == serviceId) {
                 counter = service.getCounter(randomIndex);
-                counter.getQueueManager().handleTicketRequest(customer); // todo: work on handleTicketRequest method
+                counter.getQueueManager().handleTicketRequest(customer);
             }
         }
     }

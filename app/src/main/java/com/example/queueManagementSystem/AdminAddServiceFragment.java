@@ -64,6 +64,7 @@ public class AdminAddServiceFragment extends Fragment {
 
     View view;
     DatabaseHelper db;
+    static int counterNum = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,11 +89,18 @@ public class AdminAddServiceFragment extends Fragment {
                 //tvServiceDetails.setText(text);
 
                 //add service to db
-                long val = db.addService(serviceName, numOfCounters);
+                long serviceId = db.addService(serviceName);
 
-                if (val > 0) {
-                    Toast.makeText(getActivity(), "Successfully added service", Toast.LENGTH_SHORT).show();
-                    //
+                if (serviceId > 0) {
+                    Toast.makeText(getActivity(), "Successfully added service with id " + serviceId, Toast.LENGTH_SHORT).show();
+                    // add counters to db
+                    for (int i=0; i<numOfCounters; i++) {
+                        String counterName = "Counter " + ++counterNum;
+                        long counterId = db.addCounter(counterName, (int)serviceId);
+                        if (counterId > 0) {
+                            Toast.makeText(getActivity(), "Successfully added counter with id " + counterId, Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     androidx.fragment.app.FragmentManager fm = getActivity().getSupportFragmentManager();
                     if (fm.getBackStackEntryCount() > 0) {
                         // close current fragment
