@@ -49,14 +49,14 @@
             tools:context=".CustomerActivity">
 
             <Button
+                android:id="@+id/btnServiceLoans"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/loans"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/loans"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
 
@@ -73,14 +73,14 @@
             tools:context=".CustomerActivity">
 
             <Button
+                android:id="@+id/btnServiceAccounts"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/accounts"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/accounts"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
 
@@ -96,14 +96,14 @@
             tools:context=".CustomerActivity">
 
             <Button
+                android:id="@+id/btnServicePayments"
                 android:layout_width="270dp"
                 android:layout_height="match_parent"
-                android:text="@string/payments"
-                app:backgroundTint="@color/salmon_500"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
+                android:text="@string/payments"
                 android:textSize="16sp"
-                />
+                app:backgroundTint="@color/salmon_500" />
 
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

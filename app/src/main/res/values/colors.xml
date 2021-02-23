@@ -14,4 +14,7 @@
     <color name="grey_100">#17666666</color>
     <color name="indigo_200">#B31C255E</color>
     <color name="indigo_500">#E61C255E</color>
+    <color name="semi_white">#BFFFFFFF</color>
+    <color name="semi_white_2">#8BFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
