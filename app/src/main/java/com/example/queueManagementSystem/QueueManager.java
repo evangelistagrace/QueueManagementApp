@@ -1,20 +1,24 @@
 package com.example.queueManagementSystem;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class QueueManager {
-    private int servingTicketId;
-    private Queue<Ticket> tickets = new LinkedList<>();
+public class QueueManager implements Serializable {
+    private Queue<Ticket> tickets;
     private long lastTicketNum = 0;
     Timer newTimer;
     Counter counter;
-    Queue<Customer> queuedCustomers = new LinkedList<>();
+    Service service;
+    Ticket currentServingTicket;
 
-    public QueueManager(Counter counter) {
+    public QueueManager(Counter counter, Service service) {
+        this.tickets = new LinkedList<>();
         this.counter = counter;
+        this.service = service;
+        this.currentServingTicket = null;
     }
 
     public void generateTickets() {
@@ -29,7 +33,15 @@ public class QueueManager {
         int counterNum = this.counter.getId();
         long lastTicketNumber = getLastTicketNumber();
         Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
-        return new Ticket(111, counterNum, ticketNum); //ticket created with random time interval assigned
+        return new Ticket(ticketNum, this.service); //ticket created with random time interval assigned
+    }
+
+    // generate ticket for a real customer
+    public Ticket generateTicket(Customer customer) {
+        int counterNum = this.counter.getId();
+        long lastTicketNumber = getLastTicketNumber();
+        Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
+        return new Ticket(ticketNum, this.service, customer); //ticket created with random time interval assigned
     }
 
     public int getRandomQueueNumber() {
@@ -71,21 +83,19 @@ public class QueueManager {
             Ticket ticket = this.tickets.peek();
             assert ticket != null;
             long period = (long)(ticket.getTicketTimeInterval() * 1000);
-
             Timer oldTimer;
+            customer = ticket.getCustomer();
+
             if (!ticket.isExpired()) {
-
                 //serve immediately
-                for (Customer queuedCustomer: this.queueManager.queuedCustomers) {
-                    if (queuedCustomer.getTicket().getTicketNumber() == ticket.getTicketNumber()) {
-                        customer = queuedCustomer;
-                    }
-                }
 
+                this.queueManager.setCurrentServingTicket(ticket);
+                //check if ticket has a real customer
                 if (customer != null) {
                     System.out.println("Currently serving customer " + customer.getUsername() + " with " + ticket.getTicketNumber());
                 } else {
                     System.out.println("Currently serving ticket" + ticket.getTicketNumber());
+                    // get customer position
                 }
 
                 // DELAY THREAD TO SIMULATE RANDOM SERVING PERIOD //
@@ -97,12 +107,22 @@ public class QueueManager {
 
                 // CONTINUE THREAD EXECUTION //
 
+                // if there is a real customer
                 if (customer != null) {
                     System.out.println("Finished serving customer " + customer.getUsername() + " with " + ticket.getTicketNumber());
                     //remove customer from queue
-                    customer.setInQueue(false);
-                    customer.setTicket(null);
-                    queuedCustomers.poll();
+                    int index = 0;
+                    int customerTicketIndex = -1;
+                    for (Ticket customerTicket: customer.getTickets()) {
+                        if (customerTicket.getTicketNumber() == ticket.getTicketNumber()) {
+                            customerTicketIndex = index;
+                        }
+                        index++;
+                    }
+
+                    if (customerTicketIndex > -1) {
+                        customer.getTickets().remove(customerTicketIndex);
+                    }
                 } else {
                     System.out.println("Finished serving " + ticket.getTicketNumber());
                 }
@@ -138,21 +158,20 @@ public class QueueManager {
     }
 
     // handle ticket request from customer
-    public void handleTicketRequest(Customer customer) {
-        Ticket newTicket = this.generateTicket();
+    public Ticket handleTicketRequest(Customer customer) {
+        Ticket newTicket = this.generateTicket(customer);
         System.out.println("QUEUED CUSTOMER " + customer.getUsername() + " WITH TICKET NUMBER " + newTicket.getTicketNumber());
-        customer.setTicket(newTicket);
-        customer.setInQueue(true);
-        this.tickets.add(newTicket);
-        queuedCustomers.add(customer);
+        customer.addTicket(newTicket);
+        this.tickets.add(newTicket); //add to queue
+        return newTicket;
     }
 
-    public int getServingTicketId() {
-        return servingTicketId;
+    public Ticket getCurrentServingTicket() {
+        return this.currentServingTicket;
     }
 
-    public void setServingTicketId(int servingTicketId) {
-        this.servingTicketId = servingTicketId;
+    public void setCurrentServingTicket(Ticket ticket) {
+        this.currentServingTicket = ticket;
     }
 
 }

@@ -1,14 +1,19 @@
 package com.example.queueManagementSystem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +27,13 @@ import java.util.ArrayList;
 public class CustomerActivity extends AppCompatActivity {
     private ActionBar toolbar;
     protected static ArrayList<Service> services = new ArrayList<>();
-    Button btnServiceLoans, btnServiceAccounts, btnServicePayments;
     DatabaseHelper db;
     Customer customer;
     Intent currentIntent;
     String username;
+    ConstraintLayout constraintLayout;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,10 +43,9 @@ public class CustomerActivity extends AppCompatActivity {
         // add code after this line
         //init components
         db = new DatabaseHelper(this);
-        btnServiceLoans = findViewById(R.id.btnServiceLoans);
-        btnServiceAccounts = findViewById(R.id.btnServiceAccounts);
         toolbar = getSupportActionBar();
         currentIntent = getIntent();
+        constraintLayout = (ConstraintLayout) findViewById(R.id.CustomerServiceMenuLayout);
 
 //        toolbar.setTitle("Home");
 
@@ -60,19 +65,69 @@ public class CustomerActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
 
-        // instantiate and start counters
-        for (Service service: services) {
-            startCounters(service);
-        }
+        Button prevBtn = null;
 
         // SERVICE MENU
-       btnServiceLoans.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               customer.sendTicketRequest(customer, 1); //assume customer had clicked on a service with service id 1
-               Toast.makeText(CustomerActivity.this, "new ticket requested by " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-           }
-       });
+        // create dynamic service menu
+        // instantiate and start counters
+        for (Service service: services) {
+            Button btn = new Button(this);
+            btn.setId(service.getServiceId());
+            btn.setText(service.getServiceName());
+            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.salmon_500)));
+            btn.setTextSize(16);
+            btn.setTextColor(getResources().getColor(R.color.white));
+            btn.setWidth(700);
+            btn.setPadding(0, 10, 0, 10);
+
+            // style button
+            // add button to view
+            // add constraints
+            // add constraints to layout
+            constraintLayout.addView(btn);
+
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(constraintLayout);
+
+            constraintSet.connect(btn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
+            constraintSet.connect(btn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
+
+            if (prevBtn == null) { // n first button yet
+                constraintSet.connect(btn.getId(),ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP,0);
+            } else {
+                constraintSet.connect(btn.getId(),ConstraintSet.TOP,prevBtn.getId(),ConstraintSet.BOTTOM, 20);
+            }
+
+            constraintSet.applyTo(constraintLayout);
+
+
+            prevBtn = (Button) btn;
+
+            // dynamically attach click listener
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // need to overwrite to pass service object and customer object to service queue options fragment
+                    Fragment fragment;
+                    int serviceId = v.getId();
+                    Service serviceObj = null;
+                    for (Service service: services) {
+                        if (service.getServiceId() == serviceId) {
+                            serviceObj = service;
+                        }
+                    }
+                    assert serviceObj != null;
+                    currentIntent.putExtra("serviceObject", serviceObj);
+                    currentIntent.putExtra("customerObject", customer);
+                    fragment = new CustomerQueueOptionsFragment();
+                    loadFragment(fragment);
+                    return;
+                }
+            });
+
+            //start counter
+            startCounters(service);
+        }
 
 
         // BOTTOM NAVIGATION

@@ -39,5 +39,8 @@
     <string name="string_name">String Name</string>
     <string name="service_name">Service Name</string>
     <string name="opened_counters">Opened Counters:</string>
-    <string name="service_details">Service Name: %1$s <br/>Number of Counters: %2$s</string>
+    <string name="service_details">Service Name: %1$s <br />Number of Counters: %2$s</string>
+    <string name="service_queue_options">Service Queue Options</string>
+    <string name="request_ticket">Request Ticket</string>
+    <string name="view_queue">View Queue</string>
 </resources>

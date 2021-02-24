@@ -9,7 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Queue;
+import java.util.Timer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,8 +63,11 @@ public class CustomerTicketFragment extends Fragment {
     }
 
     View view;
-    Customer customer;
+    Customer customer, currentServingCustomer;
     Intent currentIntent;
+    Ticket ticket;
+    QueueManager queueManager;
+    Timer timer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,10 +77,28 @@ public class CustomerTicketFragment extends Fragment {
 
         //init components
         Button btnLeaveQueue = (Button) view.findViewById(R.id.btnLeaveQueue);
+        TextView tvQueuePosition = (TextView) view.findViewById(R.id.tvQueuePosition);
+
         currentIntent = getActivity().getIntent();
         customer = (Customer) currentIntent.getSerializableExtra("customerObject");
+        ticket = (Ticket) currentIntent.getSerializableExtra("ticketObject");
+        queueManager = (QueueManager) currentIntent.getSerializableExtra("queueManagerObject");
 
         Toast.makeText(getActivity(), "Welcome again " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+
+        currentServingCustomer = queueManager.getCurrentServingTicket().getCustomer();
+       if (currentServingCustomer != null && currentServingCustomer.getUsername() == customer.getUsername()) {
+           Toast.makeText(getActivity(), "IT IS YOUR TURN, " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+       } else {
+           Toast.makeText(getActivity(), "YOU ARE QUEUED, " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+       }
+
+
+
+       ////TESTING RUNNING BACKGROUND THREAD
+
+
+        /////
 
         btnLeaveQueue.setOnClickListener(new View.OnClickListener() {
             @Override

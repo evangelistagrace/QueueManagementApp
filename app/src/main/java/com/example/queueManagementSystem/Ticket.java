@@ -1,18 +1,38 @@
 package com.example.queueManagementSystem;
 
-public class Ticket {
+import java.io.Serializable;
+
+public class Ticket implements Serializable {
     private int id;
     private int counterId;
     private long ticketNumber;
     private int randomTimeInterval;
     private boolean isExpired;
+    Service service;
+    Customer customer;
 
-    public Ticket(int id, int counterId, long ticketNumber) {
-        this.id = id;
-        this.counterId = counterId;
+    public Ticket(long ticketNumber, Service service) {
         this.ticketNumber = ticketNumber;
         this.randomTimeInterval = this.getRandomTimeInterval();
         this.isExpired = false;
+        this.service = service;
+        this.customer = null;
+    }
+
+    public Ticket(long ticketNumber, Service service, Customer customer) {
+        this.ticketNumber = ticketNumber;
+        this.randomTimeInterval = this.getRandomTimeInterval();
+        this.isExpired = false;
+        this.service = service;
+        this.customer = customer;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public Service getService() {
+        return service;
     }
 
     public int getId() {
@@ -21,14 +41,6 @@ public class Ticket {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getCounterId() {
-        return counterId;
-    }
-
-    public void setCounterId(int counterId) {
-        this.counterId = counterId;
     }
 
     public long getTicketNumber() {

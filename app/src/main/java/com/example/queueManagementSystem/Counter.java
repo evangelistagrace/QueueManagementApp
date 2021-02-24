@@ -3,15 +3,15 @@ package com.example.queueManagementSystem;
 public class Counter {
     private int id;
     private String counterName;
-    private int serviceId;
     private QueueManager queueManager;
     boolean isOpen;
+    Service service;
 
     public Counter(int id, String counterName, boolean isOpen, Service service) {
         this.id = id;
         this.counterName = counterName;
-        this.serviceId = service.serviceId;
-        this.queueManager = new QueueManager(this);
+        this.service = service;
+        this.queueManager = new QueueManager(this, service);
         this.isOpen = isOpen;
     }
 
@@ -29,14 +29,6 @@ public class Counter {
 
     public void setCounterName(String counterName) {
         this.counterName = counterName;
-    }
-
-    public int getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(int serviceId) {
-        this.serviceId = serviceId;
     }
 
     public QueueManager getQueueManager() {

@@ -1,8 +1,9 @@
 package com.example.queueManagementSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Service {
+public class Service implements Serializable {
     int serviceId;
     String serviceName;
     ArrayList<Counter> counters;
@@ -13,12 +14,16 @@ public class Service {
         this.counters = new ArrayList<>();
     }
 
-    public Counter getCounter(int index) {
-        return this.counters.get(index);
+    public String getServiceName() {
+        return serviceName;
     }
 
     public void addCounter(Counter counter) {
         this.counters.add(counter);
+    }
+
+    public Counter getCounter(int index) {
+        return this.counters.get(index);
     }
 
     public ArrayList<Counter> getCounters() {

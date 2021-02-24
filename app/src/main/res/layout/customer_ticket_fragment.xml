@@ -45,6 +45,7 @@
         tools:context=".CustomerTicketFragment">
 
         <TextView
+            android:id="@+id/tvQueuePosition"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/rounded_corner"
