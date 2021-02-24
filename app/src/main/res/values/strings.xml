@@ -43,4 +43,6 @@
     <string name="service_queue_options">Service Queue Options</string>
     <string name="request_ticket">Request Ticket</string>
     <string name="view_queue">View Queue</string>
+    <string name="currently_serving">Currently Serving: </string>
+    <string name="ticket_number">Your Ticket Number:</string>
 </resources>

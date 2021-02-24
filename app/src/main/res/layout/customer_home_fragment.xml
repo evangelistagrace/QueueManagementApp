@@ -11,13 +11,13 @@
         android:id="@+id/el1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerActivity">
 
         <TextView
             android:layout_width="270dp"
@@ -25,80 +25,33 @@
             android:fontFamily="@font/kollektif"
             android:gravity="center"
             android:text="@string/cust_home_text_1"
-            android:textColor="@color/indigo_500"
+            android:textColor="@color/indigo_700"
             android:textSize="28sp" />
 
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/el2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="64dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el1"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
+        tools:context=".CustomerActivity">
 
-        <Button
-            android:layout_width="270dp"
-            android:layout_height="match_parent"
-            android:text="@string/loans"
-            app:backgroundTint="@color/salmon_500"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textSize="16sp"
-        />
 
-    </FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CustomerServiceMenuLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/el3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/el2"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
 
-        <Button
-            android:layout_width="270dp"
-            android:layout_height="match_parent"
-            android:text="@string/accounts"
-            app:backgroundTint="@color/salmon_500"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textSize="16sp"
-        />
 
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/el3"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerHomeFragment">
-
-        <Button
-            android:layout_width="270dp"
-            android:layout_height="match_parent"
-            android:text="@string/payments"
-            app:backgroundTint="@color/salmon_500"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textSize="16sp"
-        />
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

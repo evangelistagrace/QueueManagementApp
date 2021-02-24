@@ -88,7 +88,6 @@ public class QueueManager implements Serializable {
 
             if (!ticket.isExpired()) {
                 //serve immediately
-
                 this.queueManager.setCurrentServingTicket(ticket);
                 //check if ticket has a real customer
                 if (customer != null) {

@@ -159,7 +159,7 @@ public class CustomerQueueOptionsFragment extends Fragment {
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.customer_fragment_container, fragment);
+        transaction.replace(R.id.customer_fragment_container, fragment, "customerTicketFragment");
         transaction.addToBackStack(null);
         transaction.commit();
     }

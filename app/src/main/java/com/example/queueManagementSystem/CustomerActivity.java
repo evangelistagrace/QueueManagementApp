@@ -109,18 +109,28 @@ public class CustomerActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     // need to overwrite to pass service object and customer object to service queue options fragment
                     Fragment fragment;
-                    int serviceId = v.getId();
-                    Service serviceObj = null;
-                    for (Service service: services) {
-                        if (service.getServiceId() == serviceId) {
-                            serviceObj = service;
+                    Ticket requestedTicket = customer.sendTicketRequest(customer, service.getServiceId());
+                    QueueManager queueManager = null;
+
+                    if (requestedTicket != null) {
+                        for (Counter counter : service.getCounters()) {
+                            for (Ticket ticket : counter.getQueueManager().getTickets()) { // there can only be one queuemanager handling a customer's ticket for a given service
+                                if (ticket.getTicketNumber() == requestedTicket.getTicketNumber()) {
+                                    queueManager = counter.getQueueManager();
+                                }
+                            }
                         }
+                        currentIntent.putExtra("ticketObject", requestedTicket);
+                        currentIntent.putExtra("customerObject", customer);
+                        currentIntent.putExtra("queueManagerObject", queueManager);
+
+                        fragment = new CustomerTicketFragment();
+                        loadFragment(fragment);
+
+                        Toast.makeText(CustomerActivity.this, "Successfully requested for a ticket", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CustomerActivity.this, "Error in requesting ticket", Toast.LENGTH_SHORT).show();
                     }
-                    assert serviceObj != null;
-                    currentIntent.putExtra("serviceObject", serviceObj);
-                    currentIntent.putExtra("customerObject", customer);
-                    fragment = new CustomerQueueOptionsFragment();
-                    loadFragment(fragment);
                     return;
                 }
             });
