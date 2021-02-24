@@ -42,103 +42,34 @@ public class CustomerActivity extends AppCompatActivity {
 
         // add code after this line
         //init components
+
+
+        // instantiate objects
         db = new DatabaseHelper(this);
-        toolbar = getSupportActionBar();
         currentIntent = getIntent();
-        constraintLayout = (ConstraintLayout) findViewById(R.id.CustomerServiceMenuLayout);
 
-//        toolbar.setTitle("Home");
-
-        //instantiate customer
+//       //instantiate customer
         username = currentIntent.getStringExtra("USERNAME");
         customer = new Customer(username);
-
-        Toast.makeText(CustomerActivity.this, "Welcome " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-
-
-        // instantiate services
+//
+//        Toast.makeText(CustomerActivity.this, "Welcome " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+//
+//
+//        // instantiate services
         Cursor cursor = db.getServices();
-
+//
         if (cursor.moveToFirst()) {
             do {
                 services.add(new Service(cursor.getInt(0), cursor.getString(1)));
             } while (cursor.moveToNext());
         }
 
-        Button prevBtn = null;
-
-        // SERVICE MENU
-        // create dynamic service menu
-        // instantiate and start counters
-        for (Service service: services) {
-            Button btn = new Button(this);
-            btn.setId(service.getServiceId());
-            btn.setText(service.getServiceName());
-            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.salmon_500)));
-            btn.setTextSize(16);
-            btn.setTextColor(getResources().getColor(R.color.white));
-            btn.setWidth(700);
-            btn.setPadding(0, 10, 0, 10);
-
-            // style button
-            // add button to view
-            // add constraints
-            // add constraints to layout
-            constraintLayout.addView(btn);
-
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(constraintLayout);
-
-            constraintSet.connect(btn.getId(),ConstraintSet.RIGHT,ConstraintSet.PARENT_ID,ConstraintSet.RIGHT,0);
-            constraintSet.connect(btn.getId(),ConstraintSet.LEFT,ConstraintSet.PARENT_ID,ConstraintSet.LEFT,0);
-
-            if (prevBtn == null) { // n first button yet
-                constraintSet.connect(btn.getId(),ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP,0);
-            } else {
-                constraintSet.connect(btn.getId(),ConstraintSet.TOP,prevBtn.getId(),ConstraintSet.BOTTOM, 20);
-            }
-
-            constraintSet.applyTo(constraintLayout);
-
-
-            prevBtn = (Button) btn;
-
-            // dynamically attach click listener
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // need to overwrite to pass service object and customer object to service queue options fragment
-                    Fragment fragment;
-                    Ticket requestedTicket = customer.sendTicketRequest(customer, service.getServiceId());
-                    QueueManager queueManager = null;
-
-                    if (requestedTicket != null) {
-                        for (Counter counter : service.getCounters()) {
-                            for (Ticket ticket : counter.getQueueManager().getTickets()) { // there can only be one queuemanager handling a customer's ticket for a given service
-                                if (ticket.getTicketNumber() == requestedTicket.getTicketNumber()) {
-                                    queueManager = counter.getQueueManager();
-                                }
-                            }
-                        }
-                        currentIntent.putExtra("ticketObject", requestedTicket);
-                        currentIntent.putExtra("customerObject", customer);
-                        currentIntent.putExtra("queueManagerObject", queueManager);
-
-                        fragment = new CustomerTicketFragment();
-                        loadFragment(fragment);
-
-                        Toast.makeText(CustomerActivity.this, "Successfully requested for a ticket", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(CustomerActivity.this, "Error in requesting ticket", Toast.LENGTH_SHORT).show();
-                    }
-                    return;
-                }
-            });
-
-            //start counter
-            startCounters(service);
-        }
-
+        // init layout
+        currentIntent.putExtra("customerObject", customer);
+        Fragment homeFragment = new CustomerHomeFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.customer_fragment_container, homeFragment);
+        transaction.commit();
 
         // BOTTOM NAVIGATION
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -150,7 +81,9 @@ public class CustomerActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_home:
 //                        toolbar.setTitle("Home");
-                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        Fragment homeFragment = new CustomerHomeFragment();
+                        loadFragment(homeFragment);
                         return true;
                     case R.id.action_tickets:
 //                        toolbar.setTitle("Tickets");
@@ -200,7 +133,7 @@ public class CustomerActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.customer_fragment_container, fragment);
+        transaction.add(R.id.customer_fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

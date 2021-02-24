@@ -72,7 +72,7 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
     Timer timer;
     TextView tvQueuePosition, tvCurrentlyServing, tvCustomerTicketNumber;
     static int i = 0;
-    String currentServingTicketNumber;
+//    String currentServingTicketNumber;
 
     //  background thread that displays queue details to UI
     private void runThread() {
@@ -84,19 +84,19 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                currentServingTicketNumber = String.valueOf(queueManager.getCurrentServingTicket().getTicketNumber());
-                                long positionNumber = ticket.getTicketNumber() - Long.parseLong(currentServingTicketNumber);
+                                long currentServingTicketNumber = queueManager.getCurrentServingTicket().getTicketNumber();
+                                String positionNumber = String.valueOf(ticket.getTicketNumber() - currentServingTicketNumber);
 
                                 // display customer position in queue
-                                tvQueuePosition.setText(String.valueOf(positionNumber));
+                                tvQueuePosition.setText(positionNumber);
 
                                 // display current serving ticket number
-                                tvCurrentlyServing.setText(getResources().getString(R.string.currently_serving) + " " + currentServingTicketNumber);
+                                tvCurrentlyServing.setText(getResources().getString(R.string.currently_serving) + " " + String.valueOf(currentServingTicketNumber));
 
                                 // alert customer if it is their turn
                                 currentServingCustomer = queueManager.getCurrentServingTicket().getCustomer();
                                 if (currentServingCustomer != null && currentServingCustomer.getUsername() == customer.getUsername()) {
-                                    Toast.makeText(getActivity(), "IT IS YOUR TURN, " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "NOW SERVING CUSTOMER " + customer.getUsername(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -141,41 +141,41 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
 
         tvCustomerTicketNumber.setText(getResources().getString(R.string.ticket_number) + " "  + ticket.getTicketNumber());
 
-//
-//
-//        Toast.makeText(getActivity(), "Welcome again " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-
-//        currentServingCustomer = queueManager.getCurrentServingTicket().getCustomer();
-//       if (currentServingCustomer != null && currentServingCustomer.getUsername() == customer.getUsername()) {
-//           Toast.makeText(getActivity(), "IT IS YOUR TURN, " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-//       } else {
-//           Toast.makeText(getActivity(), "YOU ARE QUEUED, " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-//       }
-
-
-       //TESTING RUNNING BACKGROUND THREAD
+       //run background thread
         runThread();
 
         btnLeaveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                //try catch to gracefully get back to main activity
                 try {
-                    //
-
                     androidx.fragment.app.FragmentManager fm = getActivity().getSupportFragmentManager();
                     if (fm.getBackStackEntryCount() > 0) {
-                        // close current fragment
-                        fm.popBackStack();
-                    }
+                        // clear customer ticker first
+                        // clear only if the ticket is not currently being served
+                        if (queueManager.getCurrentServingTicket().getTicketNumber() != ticket.getTicketNumber()) {
+                            int index = 0;
+                            int customerTicketIndex = -1;
+                            for (Ticket customerTicket: customer.getTickets()) {
+                                if (customerTicket.getTicketNumber() == ticket.getTicketNumber()) {
+                                    customerTicketIndex = index;
+                                }
+                                index++;
+                            }
 
-                    Toast.makeText(getActivity(), "Left queue for service " + ticket.getService().getServiceName(), Toast.LENGTH_SHORT).show();
-                } catch(Exception err) {
+                            if (customerTicketIndex > -1) {
+                                customer.getTickets().remove(customerTicketIndex);
+                            }
+
+                            ticket.setExpired(true);
+                        }
+                        // close current fragment
+                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                } catch (Exception err) {
                     return;
                 }
-
-
             }
         });
 

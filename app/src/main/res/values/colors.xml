@@ -17,4 +17,5 @@
     <color name="semi_white">#BFFFFFFF</color>
     <color name="semi_white_2">#8BFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="grey_400">#aaa</color>
 </resources>

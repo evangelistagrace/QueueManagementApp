@@ -7,11 +7,13 @@ public class Service implements Serializable {
     int serviceId;
     String serviceName;
     ArrayList<Counter> counters;
+    boolean countersStarted;
 
     public Service(int serviceId, String serviceName) {
         this.serviceId = serviceId;
         this.serviceName = serviceName;
         this.counters = new ArrayList<>();
+        this.countersStarted = false;
     }
 
     public String getServiceName() {
@@ -32,5 +34,13 @@ public class Service implements Serializable {
 
     public int getServiceId() {
         return serviceId;
+    }
+
+    public void setCountersStarted(boolean bool) {
+        this.countersStarted = bool;
+    }
+
+    public boolean getCountersStarted() {
+        return this.countersStarted;
     }
 }
