@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,13 +16,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CustomerTicketsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CustomerTicketsFragment extends Fragment implements CustomerTicketsAdapter.ItemClickListener, CustomerTicketsAdapter.ButtonClickListener {
+public class CustomerTicketsFragment extends Fragment implements CustomerTicketsAdapter.ItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,11 +85,6 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
 
         // data to populate the RecyclerView with
         ArrayList<Ticket> tickets = customer.getTickets();
-//        ArrayList<String> ticketNumbers = new ArrayList<>();
-//
-//        for (Ticket ticket: tickets) {
-//            ticketNumbers.add(String.valueOf(ticket.getTicketNumber()));
-//        }
 
         // set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.rvCustomerTickets);
@@ -95,15 +93,54 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
-//        btnTicketView = view.findViewById(R.id.btnTicketView);
-//        btnTicketCancel = view.findViewById(R.id.btnTicketCancel);
-
         return view;
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    public void onItemClick(List<Ticket> tickets, int position) {
+        //view has to be clicked first
+        // load ticket fragment
+
+        view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Ticket ticket = tickets.get(position);
+                Customer customer = ticket.getCustomer();
+                QueueManager queueManager = ticket.getCounter().getQueueManager();
+
+                currentIntent.putExtra("ticketObject", ticket);
+                currentIntent.putExtra("customerObject", customer);
+                currentIntent.putExtra("queueManagerObject", queueManager);
+
+                Fragment fragment = new CustomerTicketFragment();
+                loadFragment(fragment);
+            }
+        });
+
+
+        //continue heree
+        view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "View cancel " + tickets.get(position).getTicketNumber(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.customer_fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+//    @Override
+//    public void onBtnClick(Button btnTicketView, List<Ticket> tickets, int position) {
+//        Toast.makeText(getActivity(), "Btn " + btnTicketView.getId() + " for ticekt " + tickets.get(position), Toast.LENGTH_SHORT).show();
+//
+//    }
+
 }

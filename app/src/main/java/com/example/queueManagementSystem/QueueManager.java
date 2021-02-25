@@ -33,7 +33,7 @@ public class QueueManager implements Serializable {
         int counterNum = this.counter.getId();
         long lastTicketNumber = getLastTicketNumber();
         Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
-        return new Ticket(ticketNum, this.service); //ticket created with random time interval assigned
+        return new Ticket(ticketNum, this.service, this.counter); //ticket created with random time interval assigned
     }
 
     // generate ticket for a real customer
@@ -41,12 +41,12 @@ public class QueueManager implements Serializable {
         int counterNum = this.counter.getId();
         long lastTicketNumber = getLastTicketNumber();
         Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
-        return new Ticket(ticketNum, this.service, customer); //ticket created with random time interval assigned
+        return new Ticket(ticketNum, this.service, this.counter, customer); //ticket created with random time interval assigned
     }
 
     public int getRandomQueueNumber() {
         int min = 1;
-        int max = 10;
+        int max = 20;
         int randomQueueNumber = (int)(Math.random() * (max - min + 1) + min);
         System.out.println(randomQueueNumber);
         return randomQueueNumber;

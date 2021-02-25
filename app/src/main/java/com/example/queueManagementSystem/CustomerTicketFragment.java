@@ -111,7 +111,8 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                         });
                         Thread.sleep(period);
                     } else{
-                        Toast.makeText(getActivity(), "No activity", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "No activity", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
                 } catch (InterruptedException e) {

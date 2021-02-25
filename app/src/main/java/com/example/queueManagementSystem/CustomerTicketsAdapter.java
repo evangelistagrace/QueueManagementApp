@@ -40,12 +40,12 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
         Button btnTicketView = view.findViewById(R.id.btnTicketView);
         Button btnTicketCancel = view.findViewById(R.id.btnTicketCancel);
 
-        btnTicketView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "btn view id: " + btnTicketView.getId(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        btnTicketView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(v.getContext(), "btn view id: " + btnTicketView.getId(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return new ViewHolder(view);
     }
@@ -58,7 +58,7 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
 
         holder.tvTicketNumber.setText("Ticket #" + ticketNumber);
         holder.tvTicketService.setText(ticketService);
-        holder.btnTicketView.setId((int) mData.get(position).getTicketNumber());
+//        holder.btnTicketView.setId((int) mData.get(position).getTicketNumber());
     }
 
     // total number of rows
@@ -66,7 +66,6 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
     public int getItemCount() {
         return mData.size();
     }
-
 
     QueueManager queueManager;
     Queue<Ticket> tickets;
@@ -84,13 +83,18 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
             btnTicketView = itemView.findViewById(R.id.btnTicketView);
             btnTicketCancel = itemView.findViewById(R.id.btnTicketCancel);
 
-            itemView.setOnClickListener(this);
+            btnTicketView.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) {
+                mClickListener.onItemClick(mData, getAdapterPosition());
+//                mClickListener.onBtnClick(btnTicketView, mData, getAdapterPosition());
+            }
         }
+
     }
 
     // convenience method for getting data at click position
@@ -105,10 +109,7 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public interface ButtonClickListener { //continue here
-        void onItemClick(View view, int position);
+        void onItemClick(List<Ticket> tickets, int position);
+//        void onBtnClick(Button btn, List<Ticket> tickets, int position);
     }
 }

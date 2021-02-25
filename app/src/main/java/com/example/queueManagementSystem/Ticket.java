@@ -4,26 +4,29 @@ import java.io.Serializable;
 
 public class Ticket implements Serializable {
     private int id;
-    private int counterId;
+//    private Counter counter;
     private long ticketNumber;
     private int randomTimeInterval;
     private boolean isExpired;
     Service service;
     Customer customer;
+    Counter counter;
 
-    public Ticket(long ticketNumber, Service service) {
+    public Ticket(long ticketNumber, Service service, Counter counter) {
         this.ticketNumber = ticketNumber;
         this.randomTimeInterval = this.getRandomTimeInterval();
         this.isExpired = false;
         this.service = service;
+        this.counter = counter;
         this.customer = null;
     }
 
-    public Ticket(long ticketNumber, Service service, Customer customer) {
+    public Ticket(long ticketNumber, Service service, Counter counter,  Customer customer) {
         this.ticketNumber = ticketNumber;
         this.randomTimeInterval = this.getRandomTimeInterval();
         this.isExpired = false;
         this.service = service;
+        this.counter = counter;
         this.customer = customer;
     }
 
@@ -69,6 +72,10 @@ public class Ticket implements Serializable {
 
     public boolean isExpired() {
         return this.isExpired;
+    }
+
+    public Counter getCounter() {
+        return counter;
     }
 }
 
