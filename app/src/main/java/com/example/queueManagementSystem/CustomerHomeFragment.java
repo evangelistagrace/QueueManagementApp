@@ -214,11 +214,15 @@ public class CustomerHomeFragment extends Fragment {
         }
     }
 
-    private void loadFragment(Fragment fragment) {
+    void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.customer_fragment_container, fragment);
+        transaction.add(R.id.customer_fragment_container, fragment, Integer.toString(getFragmentCount()));
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected int getFragmentCount() {
+        return getActivity().getSupportFragmentManager().getBackStackEntryCount();
     }
 }

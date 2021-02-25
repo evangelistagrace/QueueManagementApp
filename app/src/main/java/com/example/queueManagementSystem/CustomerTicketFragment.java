@@ -1,10 +1,12 @@
 package com.example.queueManagementSystem;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,15 +74,22 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
     Timer timer;
     TextView tvQueuePosition, tvCurrentlyServing, tvCustomerTicketNumber;
     static int i = 0;
-//    String currentServingTicketNumber;
+    RunnableExample runnable;
+    Thread thread;
 
-    //  background thread that displays queue details to UI
-    private void runThread() {
-        new Thread() {
-            public void run() {
-                while (!ticket.isExpired()) {
-                    try {
-                        long period = (long)(queueManager.getCurrentServingTicket().getTicketTimeInterval() * 1000);
+    class RunnableExample implements Runnable {
+        private volatile boolean running = true;
+
+        public void terminate() {
+            running = false;
+        }
+
+        public void run() {
+            while (!ticket.isExpired() && running && !Thread.currentThread().isInterrupted()) {
+                try {
+                    long period = (long)(queueManager.getCurrentServingTicket().getTicketTimeInterval() * 1000);
+                    Activity activity = getActivity();
+                    if (activity!=null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -101,25 +110,39 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                             }
                         });
                         Thread.sleep(period);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } else{
+                        Toast.makeText(getActivity(), "No activity", Toast.LENGTH_SHORT).show();
                     }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
-
-                //try catch to gracefully get back to main activity
-                try {
-                    androidx.fragment.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-                    if (fm.getBackStackEntryCount() > 0) {
-                        // close current fragment
-                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
-                } catch (Exception err) {
-                    return;
-                }
-
             }
-        }.start();
+
+            //try catch to gracefully get back to main activity
+            // stop thread and pop off ticket fragment
+            try {
+                //load a new fragment?
+                currentIntent.putExtra("customerObject", customer);
+                currentIntent.putExtra("queueManagerObject", queueManager);
+                Fragment fragment = new CustomerTicketsFragment(); // loads even for fragment on top
+                loadFragment(fragment);
+
+                if (runnable != null) {
+                    runnable.terminate();
+                    thread.join();
+                }
+            } catch (Exception err) {
+                return;
+            }
+        }
+    }
+
+    //  background thread that displays queue details to UI
+    private void runThread() throws InterruptedException {
+        runnable = new RunnableExample();
+        thread = new Thread(runnable);
+        thread.start();
     }
 
     @Override
@@ -142,7 +165,11 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
         tvCustomerTicketNumber.setText(getResources().getString(R.string.ticket_number) + " "  + ticket.getTicketNumber());
 
        //run background thread
-        runThread();
+        try {
+            runThread();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         btnLeaveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +199,10 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                         }
                         // close current fragment
                         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                        if (runnable != null) {
+//                            runnable.terminate();
+//                            thread.join();
+//                        }
                     }
                 } catch (Exception err) {
                     return;
@@ -180,5 +211,25 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
         });
 
         return view;
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.customer_fragment_container, fragment, Integer.toString(getFragmentCount()));
+//        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    protected int getFragmentCount() {
+        return getActivity().getSupportFragmentManager().getBackStackEntryCount();
+    }
+
+    private Fragment getFragmentAt(int index) {
+        return getFragmentCount() > 0 ? getActivity().getSupportFragmentManager().findFragmentByTag(Integer.toString(index)) : null;
+    }
+
+    protected Fragment getCurrentFragment() {
+        return getFragmentAt(getFragmentCount() - 1);
     }
 }

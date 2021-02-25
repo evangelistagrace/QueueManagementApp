@@ -45,4 +45,6 @@
     <string name="view_queue">View Queue</string>
     <string name="currently_serving">Currently Serving: </string>
     <string name="ticket_number">Your Ticket Number:</string>
+    <string name="my_tickets">My Tickets</string>
+    <string name="sample_ticket_number">1011</string>
 </resources>

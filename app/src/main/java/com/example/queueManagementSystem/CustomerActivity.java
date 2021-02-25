@@ -89,7 +89,7 @@ public class CustomerActivity extends AppCompatActivity {
 //                        toolbar.setTitle("Tickets");
                         // load customer object into intent before loading fragment
                         currentIntent.putExtra("customerObject", customer);
-                        fragment = new CustomerTicketFragment();
+                        fragment = new CustomerTicketsFragment();
                         loadFragment(fragment);
                         return true;
                     case R.id.action_profile:
@@ -133,8 +133,12 @@ public class CustomerActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.customer_fragment_container, fragment);
+        transaction.add(R.id.customer_fragment_container, fragment, Integer.toString(getFragmentCount()));
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected int getFragmentCount() {
+        return getSupportFragmentManager().getBackStackEntryCount();
     }
 }
