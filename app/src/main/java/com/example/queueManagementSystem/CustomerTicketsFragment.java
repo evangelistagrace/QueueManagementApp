@@ -118,7 +118,7 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         });
 
 
-        //continue heree
+        //todo: add cancel ticket handling here
         view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

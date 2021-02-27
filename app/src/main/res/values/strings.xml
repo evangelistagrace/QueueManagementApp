@@ -19,7 +19,7 @@
     <string name="accounts">Accounts</string>
     <string name="payments">Payments</string>
     <string name="loans">Loans</string>
-    <string name="cust_ticket_text_1">Thank you for waiting. Your position in the queue is:</string>
+    <string name="cust_ticket_text_1">Thank you for waiting. Your position in queue is:</string>
     <string name="dummy_num">5</string>
     <string name="cust_ticket_text_2">We\&apos;ll notify you once we\&apos;re ready to serve you.</string>
     <string name="leave_queue">Leave queue</string>
@@ -47,4 +47,6 @@
     <string name="ticket_number">Your Ticket Number:</string>
     <string name="my_tickets">My Tickets</string>
     <string name="sample_ticket_number">1011</string>
+    <string name="channel_name">QMS</string>
+    <string name="channel_description">a queue management app</string>
 </resources>

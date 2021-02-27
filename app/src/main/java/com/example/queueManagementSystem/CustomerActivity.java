@@ -6,10 +6,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.FragmentManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -25,6 +29,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 public class CustomerActivity extends AppCompatActivity {
+    private static final String CHANNEL_ID = "QMS";
     private ActionBar toolbar;
     protected static ArrayList<Service> services = new ArrayList<>();
     DatabaseHelper db;
@@ -41,23 +46,26 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.customer_activity);
 
         // add code after this line
+
+        //hide action bar
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();
+
         //init components
-
-
         // instantiate objects
         db = new DatabaseHelper(this);
         currentIntent = getIntent();
 
-//       //instantiate customer
+        //instantiate customer
         username = currentIntent.getStringExtra("USERNAME");
         customer = new Customer(username);
-//
-//        Toast.makeText(CustomerActivity.this, "Welcome " + customer.getUsername(), Toast.LENGTH_SHORT).show();
-//
-//
-//        // instantiate services
+
+        createNotificationChannel();
+
+        // instantiate services
         Cursor cursor = db.getServices();
-//
+
         if (cursor.moveToFirst()) {
             do {
                 services.add(new Service(cursor.getInt(0), cursor.getString(1)));
@@ -140,5 +148,21 @@ public class CustomerActivity extends AppCompatActivity {
 
     protected int getFragmentCount() {
         return getSupportFragmentManager().getBackStackEntryCount();
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

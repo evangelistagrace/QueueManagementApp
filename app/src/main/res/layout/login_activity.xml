@@ -18,7 +18,7 @@
         android:id="@+id/iv_logo_login"
         android:layout_width="194dp"
         android:layout_height="211dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
         android:src="@drawable/logo5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,6 @@
             app:boxBackgroundMode="filled"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:hintTextColor="@color/material_on_background_emphasis_medium"
             app:startIconDrawable="@drawable/ic_user">
 
             <com.google.android.material.textfield.TextInputEditText

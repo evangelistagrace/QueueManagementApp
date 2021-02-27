@@ -18,4 +18,8 @@
     <color name="semi_white_2">#8BFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="grey_400">#aaa</color>
+    <color name="magenta">#B03068</color>
+    <color name="magenta3">#cd4c82</color>
+    <color name="magenta_semi_opaque">#C8B03068</color>
+    <color name="magenta_semi_opaque_200">#C1CD4C82</color>
 </resources>

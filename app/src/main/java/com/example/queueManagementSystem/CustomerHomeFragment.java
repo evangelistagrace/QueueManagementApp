@@ -1,5 +1,6 @@
 package com.example.queueManagementSystem;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -14,11 +15,17 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -77,7 +84,9 @@ public class CustomerHomeFragment extends Fragment {
     Intent currentIntent;
     String username;
     ConstraintLayout constraintLayout;
+    TextView tvWelcome;
 
+    @SuppressLint({"NewApi", "UseCompatTextViewDrawableApis"})
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,17 +95,16 @@ public class CustomerHomeFragment extends Fragment {
         view = inflater.inflate(R.layout.customer_home_fragment, container, false);
 
         db = new DatabaseHelper(getActivity());
-//        toolbar = getSupportActionBar();
-//        currentIntent = getIntent();
 
         currentIntent = getActivity().getIntent();
         customer = (Customer) currentIntent.getSerializableExtra("customerObject");
         services = CustomerActivity.getServices();
+        tvWelcome = (TextView) view.findViewById(R.id.tvWelcome);
 
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.CustomerServiceMenuLayout);
 
-//
-//        Toast.makeText(getActivity(), "Welcome " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+        // set welome text
+        tvWelcome.setText("Welcome back, " + customer.getUsername());
 
         Button prevBtn = null;
 //
@@ -104,16 +112,27 @@ public class CustomerHomeFragment extends Fragment {
 //        // create dynamic service menu
 //        // instantiate and start counters
         for (Service service: services) {
-
+            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT);
             Button btn = new Button(getActivity());
             btn.setId(service.getServiceId());
             btn.setText(service.getServiceName());
             btn.setEnabled(true);
-            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.salmon_500)));
+            btn.setBackground(getResources().getDrawable(R.drawable.semi_opaque_button));
+            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
             btn.setTextSize(16);
-            btn.setTextColor(getResources().getColor(R.color.white));
-            btn.setWidth(700);
-            btn.setPadding(0, 10, 0, 10);
+            btn.setTextColor(getResources().getColor(R.color.magenta3));
+            btn.setPadding(
+                    Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics())),
+                    Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics())),
+                    Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics())),
+                    Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()))
+            );
+            btn.setGravity(Gravity.START);
+            btn.setLayoutParams(lp); // set width to 0dp
+            // set icon
+            btn.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_arrow_right), null);
+            btn.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.magenta3)));
+            btn.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()));
 
             // style button
             // add button to view
@@ -130,11 +149,10 @@ public class CustomerHomeFragment extends Fragment {
             if (prevBtn == null) { // n first button yet
                 constraintSet.connect(btn.getId(),ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP,0);
             } else {
-                constraintSet.connect(btn.getId(),ConstraintSet.TOP,prevBtn.getId(),ConstraintSet.BOTTOM, 20);
+                constraintSet.connect(btn.getId(),ConstraintSet.TOP,prevBtn.getId(),ConstraintSet.BOTTOM, 40);
             }
 
             constraintSet.applyTo(constraintLayout);
-
 
             prevBtn = (Button) btn;
 
@@ -175,6 +193,8 @@ public class CustomerHomeFragment extends Fragment {
                 if (ticket.getService().getServiceId() == btn.getId()) {
                     btn.setBackgroundTintList(null);
                     btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey_400)));
+                    btn.setTextColor(getResources().getColor(R.color.white));
+                    btn.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
                     btn.setEnabled(false);
                     btn.setOnClickListener(null);
                 }

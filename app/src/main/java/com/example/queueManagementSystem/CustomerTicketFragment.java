@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -30,6 +32,7 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String CHANNEL_ID = "QMS";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -94,18 +97,18 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                             @Override
                             public void run() {
                                 long currentServingTicketNumber = queueManager.getCurrentServingTicket().getTicketNumber();
-                                String positionNumber = String.valueOf(ticket.getTicketNumber() - currentServingTicketNumber);
+                                long positionNumber = ticket.getTicketNumber() - currentServingTicketNumber;
 
                                 // display customer position in queue
-                                tvQueuePosition.setText(positionNumber);
+                                tvQueuePosition.setText(String.valueOf(positionNumber));
 
                                 // display current serving ticket number
-                                tvCurrentlyServing.setText(getResources().getString(R.string.currently_serving) + " " + String.valueOf(currentServingTicketNumber));
+                                tvCurrentlyServing.setText(String.valueOf(currentServingTicketNumber));
 
                                 // alert customer if it is their turn
                                 currentServingCustomer = queueManager.getCurrentServingTicket().getCustomer();
                                 if (currentServingCustomer != null && currentServingCustomer.getUsername() == customer.getUsername()) {
-                                    Toast.makeText(getActivity(), "NOW SERVING CUSTOMER " + customer.getUsername(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Now serving. Please go to " + queueManager.getCurrentServingTicket().getCounter().getCounterName(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -163,7 +166,22 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
         ticket = (Ticket) currentIntent.getSerializableExtra("ticketObject");
         queueManager = (QueueManager) currentIntent.getSerializableExtra("queueManagerObject");
 
-        tvCustomerTicketNumber.setText(getResources().getString(R.string.ticket_number) + " "  + ticket.getTicketNumber());
+        tvCustomerTicketNumber.setText(String.valueOf(ticket.getTicketNumber()));
+        tvQueuePosition.setText("");
+
+
+//         send notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_ticket)
+                .setContentTitle("Ticket Page")
+                .setContentText("Another Test Noti")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
+        // send notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+
+        notificationManager.notify(191, builder.build());
 
        //run background thread
         try {
