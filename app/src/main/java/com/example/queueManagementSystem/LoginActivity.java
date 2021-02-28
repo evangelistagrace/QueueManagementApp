@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "IS ADMIN", Toast.LENGTH_SHORT).show();
                     Intent adminIntent = new Intent(LoginActivity.this, AdminActivity.class);
                     startActivity(adminIntent);
+                    finish();
                     return;
                 }
 
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent customerIntent = new Intent(LoginActivity.this, CustomerActivity.class);
                     customerIntent.putExtra("USERNAME", username);
                     startActivity(customerIntent);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                 }

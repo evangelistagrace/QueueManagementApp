@@ -59,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();
                         Intent moveToLogin = new Intent(RegisterActivity.this, LoginActivity.class);
                         startActivity(moveToLogin);
+                        finish();
                     }
                 } else {
                     Toast.makeText(RegisterActivity.this, "Account already exists, please login", Toast.LENGTH_SHORT).show();

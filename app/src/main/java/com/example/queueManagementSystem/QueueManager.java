@@ -99,7 +99,7 @@ public class QueueManager implements Serializable {
 
                 // DELAY THREAD TO SIMULATE RANDOM SERVING PERIOD //
                 try {
-                    Thread.sleep(period);
+                    Thread.sleep(period); //wait until ticket get served
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }

@@ -49,4 +49,10 @@
     <string name="sample_ticket_number">1011</string>
     <string name="channel_name">QMS</string>
     <string name="channel_description">a queue management app</string>
+    <string name="cancel">Cancel</string>
+    <string name="view">View</string>
+    <string name="my_profile">my_profile</string>
+    <string name="my_profilee">My Profile</string>
+    <string name="tickets">Tickets</string>
+    <string name="logout">Sign Out</string>
 </resources>

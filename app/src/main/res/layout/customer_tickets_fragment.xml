@@ -4,63 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beige_200"
+    android:background="@drawable/gradient3"
     tools:context=".CustomerTicketsFragment">
 
-    <FrameLayout
+    <TextView
         android:id="@+id/el1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/kollektif"
+        android:gravity="left"
+        android:text="@string/tickets"
+        android:textColor="@color/white"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context=".CustomerTicketsFragment">
+        tools:context=".CustomerTicketsFragment"/>
 
-        <TextView
-            android:layout_width="270dp"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/kollektif"
-            android:gravity="center"
-            android:text="@string/my_tickets"
-            android:textColor="@color/indigo_700"
-            android:textSize="28sp" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/el2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CustomerTicketsLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el1"
-        app:layout_constraintVertical_bias="0.0"
         tools:context=".CustomerTicketsFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CustomerTicketsLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCustomerTickets"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCustomerTickets"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

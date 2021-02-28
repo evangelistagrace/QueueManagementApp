@@ -101,30 +101,41 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         //view has to be clicked first
         // load ticket fragment
 
-        view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Ticket ticket = tickets.get(position);
-                Customer customer = ticket.getCustomer();
-                QueueManager queueManager = ticket.getCounter().getQueueManager();
+        Ticket ticket = tickets.get(position);
+        Customer customer = ticket.getCustomer();
+        QueueManager queueManager = ticket.getCounter().getQueueManager();
 
-                currentIntent.putExtra("ticketObject", ticket);
-                currentIntent.putExtra("customerObject", customer);
-                currentIntent.putExtra("queueManagerObject", queueManager);
+        currentIntent.putExtra("ticketObject", ticket);
+        currentIntent.putExtra("customerObject", customer);
+        currentIntent.putExtra("queueManagerObject", queueManager);
 
-                Fragment fragment = new CustomerTicketFragment();
-                loadFragment(fragment);
-            }
-        });
+        Fragment fragment = new CustomerTicketFragment();
+        loadFragment(fragment);
 
-
-        //todo: add cancel ticket handling here
-        view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "View cancel " + tickets.get(position).getTicketNumber(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Ticket ticket = tickets.get(position);
+//                Customer customer = ticket.getCustomer();
+//                QueueManager queueManager = ticket.getCounter().getQueueManager();
+//
+//                currentIntent.putExtra("ticketObject", ticket);
+//                currentIntent.putExtra("customerObject", customer);
+//                currentIntent.putExtra("queueManagerObject", queueManager);
+//
+//                Fragment fragment = new CustomerTicketFragment();
+//                loadFragment(fragment);
+//            }
+//        });
+//
+//
+//        //todo: add cancel ticket handling here
+//        view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(), "View cancel " + tickets.get(position).getTicketNumber(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
     }

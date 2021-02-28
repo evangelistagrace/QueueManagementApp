@@ -61,7 +61,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // TODO: create user model
     public long addUser (String email, String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
