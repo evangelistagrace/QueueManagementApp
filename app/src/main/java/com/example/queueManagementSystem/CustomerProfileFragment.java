@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +60,9 @@ public class CustomerProfileFragment extends Fragment {
 
     View view;
     Button btnLogout;
+    TextView tvUsername;
+    Customer customer;
+    Intent currentIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +72,11 @@ public class CustomerProfileFragment extends Fragment {
 
         //init components
         btnLogout = (Button) view.findViewById(R.id.btnLogout);
+        tvUsername = (TextView) view.findViewById(R.id.tvUsername);
+        currentIntent = getActivity().getIntent();
+        customer = (Customer) currentIntent.getSerializableExtra("customerObject");
+
+        tvUsername.setText(customer.getUsername());
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -102,6 +102,7 @@ public class CustomerActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_profile:
 //                        toolbar.setTitle("Profile");
+                        currentIntent.putExtra("customerObject", customer);
                         fragment = new CustomerProfileFragment();
                         loadFragment(fragment);
                         return true;
