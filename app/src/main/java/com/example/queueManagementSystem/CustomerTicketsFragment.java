@@ -13,7 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,7 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
     Customer customer;
     Intent currentIntent;
     Button btnTicketView, btnTicketCancel;
+    TextView tvNoActiveTicket;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,10 +85,18 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         // init components
         currentIntent = getActivity().getIntent();
         customer = (Customer) currentIntent.getSerializableExtra("customerObject");
+        tvNoActiveTicket = (TextView) view.findViewById(R.id.tvNoActiveTicket);
 
 
         // data to populate the RecyclerView with
         ArrayList<Ticket> tickets = customer.getTickets();
+
+        if (tickets.size() == 0) {
+            tvNoActiveTicket.setVisibility(View.VISIBLE);
+        } else {
+            tvNoActiveTicket.setVisibility(View.INVISIBLE);
+        }
+
 
         // set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.rvCustomerTickets);

@@ -116,6 +116,7 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                                         break;
                                     case 0:
                                         sendNotification("Now serving!", "Please proceed to " + ticket.getCounter().getCounterName());
+                                        Toast.makeText(getActivity(), "Now Serving! Please proceed to " + ticket.getCounter().getCounterName(), Toast.LENGTH_SHORT).show();
                                         break;
                                     default:
                                         break;
@@ -179,16 +180,6 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
         tvCustomerTicketNumber.setText(String.valueOf(ticket.getTicketNumber()));
         tvQueuePosition.setText("");
 
-//        // send notification
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_ticket)
-//                .setContentTitle("Now Serving!")
-//                .setContentText("Please proceed to " + queueManager.getCurrentServingTicket().getCounter().getCounterName())
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
-//
-//        notificationManager.notify(191, builder.build());
 
        //run background thread
         try {
@@ -223,12 +214,9 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
 
                             ticket.setExpired(true);
                         }
+
                         // close current fragment
                         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                        if (runnable != null) {
-//                            runnable.terminate();
-//                            thread.join();
-//                        }
                     }
                 } catch (Exception err) {
                     return;

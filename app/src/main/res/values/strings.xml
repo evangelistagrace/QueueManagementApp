@@ -58,4 +58,5 @@
     <string name="prompt_old_password">Old Password</string>
     <string name="prompt_new_password">New Password</string>
     <string name="save_changes">Save Changes</string>
+    <string name="no_active_ticket">You have no active ticket(s) currently.</string>
 </resources>
