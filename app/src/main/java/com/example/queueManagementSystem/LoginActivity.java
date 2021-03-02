@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_cust_login;
     TextView tv_cust_register;
     DatabaseHelper db;
+    int customerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         tv_cust_register = findViewById(R.id.tv_cust_register);
 
         // create admin if there isn't one since login page is the first to initiate
-        Boolean res = db.checkUser("admin", "123");
+        int adminId = db.checkUser("admin", "123");
 
-        if (res == false) {
+        if (adminId < 0) { // no admin record found, so add admin
             db.addAdmin("admin@mail.com", "admin", "123");
         }
 
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = et_cust_password.getText().toString().trim();
 
                 Boolean isAdmin = db.checkAdmin(username, password);
-                Boolean res = db.checkUser(username, password);
+                int userId = db.checkUser(username, password);
 
                 if (isAdmin) {
                     Toast.makeText(LoginActivity.this, "IS ADMIN", Toast.LENGTH_SHORT).show();
@@ -66,10 +67,12 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (res == true) {
+                if (userId > -1) {
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
                     Intent customerIntent = new Intent(LoginActivity.this, CustomerActivity.class);
                     customerIntent.putExtra("USERNAME", username);
+                    customerIntent.putExtra("PASSWORD", password);
+                    customerIntent.putExtra("ID", userId);
                     startActivity(customerIntent);
                     finish();
                 } else {

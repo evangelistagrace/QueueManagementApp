@@ -6,11 +6,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Customer implements Serializable {
-    String username;
+    int id;
+    String username, password;
     ArrayList<Ticket> tickets;
 
-    public Customer(String username) {
+    public Customer(int id, String username, String password) {
+        this.id = id;
         this.username = username;
+        this.password = password;
         this.tickets = new ArrayList<>();
     }
 
@@ -32,6 +35,18 @@ public class Customer implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword (String newPassword) {
+        this.password = newPassword;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setUsername(String username) {

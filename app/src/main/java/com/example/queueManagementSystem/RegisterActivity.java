@@ -50,10 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = et_cust_username.getText().toString().trim();
                 String password = et_cust_password.getText().toString().trim();
 
-                Boolean res = db.checkUser(username, password);
+                int userId = db.checkUser(username, password);
 
                 // check if account already exist
-                if (res == false) {
+                if (userId < 0) { // no account found
                     long val = db.addUser(email, username, password);
                     if (val > 0) {
                         Toast.makeText(RegisterActivity.this, "Successfully registered", Toast.LENGTH_SHORT).show();

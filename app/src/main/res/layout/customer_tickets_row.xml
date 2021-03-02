@@ -11,19 +11,15 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        card_view:cardElevation="50dp"
-        card_view:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeWidth="1dp">
+        app:strokeWidth="1dp"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,8 +73,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:text="@string/view"
                     android:fontFamily="@font/kollektif"
+                    android:text="@string/view"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/magenta3" />
 
@@ -87,11 +83,11 @@
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/kollektif"
                     android:text="@android:string/cancel"
                     android:textColor="@color/magenta3"
-                    app:icon="@drawable/ic_cancel"
-                    android:fontFamily="@font/kollektif"
                     android:textFontWeight="700"
+                    app:icon="@drawable/ic_cancel"
                     app:iconTint="@color/magenta3" />
             </LinearLayout>
 

@@ -27,51 +27,168 @@
         tools:context=".CustomerProfileFragment" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="30dp"
+        android:id="@+id/customerProfileImage"
+        android:layout_width="152dp"
+        android:layout_height="141dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/avatar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/el2"
-        tools:context=".CustomerProfileFragment"
-        android:src="@drawable/avatar2" />
+        tools:context=".CustomerProfileFragment" />
 
     <TextView
-        android:id="@+id/tvUsername"
+    android:id="@+id/tvUsername"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="40dp"
+    android:layout_marginRight="40dp"
+    android:fontFamily="@font/kollektif"
+    android:gravity="center"
+    android:text="Grace"
+    android:textColor="@color/white"
+    android:textSize="30sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/customerProfileImage"
+    tools:context=".CustomerProfileFragment"/>
+
+    <LinearLayout
+        android:id="@+id/et_cust_old_password_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_cust_old_password_layout_ti"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_field_rounded_corner"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustOldPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:fontFamily="@font/kollektif"
+                android:hint="@string/prompt_old_password"
+                android:inputType="text|textPassword"
+                android:paddingTop="25dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/et_cust_new_password_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_cust_old_password_layout">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_cust_new_password_layout_ti"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_field_rounded_corner"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:fontFamily="@font/kollektif"
+                android:hint="@string/prompt_new_password"
+                android:inputType="text|textPassword"
+                android:paddingTop="25dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSaveChanges"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:fontFamily="@font/kollektif"
-        android:gravity="center"
-        android:text="Grace"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/save_changes"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:context=".CustomerProfileFragment"/>
+        app:layout_constraintTop_toBottomOf="@+id/et_cust_new_password_layout"
+        tools:context=".CustomerProfileFragment" />
 
     <Button
         android:id="@+id/btnLogout"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="@string/logout"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-        tools:context=".CustomerProfileFragment"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveChanges"
+        tools:context=".CustomerProfileFragment" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<TextView-->
+<!--android:id="@+id/tvUsername"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="40dp"-->
+<!--android:layout_marginLeft="40dp"-->
+<!--android:layout_marginTop="30dp"-->
+<!--android:layout_marginEnd="40dp"-->
+<!--android:layout_marginRight="40dp"-->
+<!--android:fontFamily="@font/kollektif"-->
+<!--android:gravity="center"-->
+<!--android:text="Grace"-->
+<!--android:textColor="@color/white"-->
+<!--android:textSize="30sp"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--tools:context=".CustomerProfileFragment"/>-->
+
+
     <!--<com.google.android.material.card.MaterialCardView-->
     <!--android:id="@+id/card"-->
     <!--app:strokeWidth="1dp"-->

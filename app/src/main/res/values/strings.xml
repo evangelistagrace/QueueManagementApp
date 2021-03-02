@@ -55,4 +55,7 @@
     <string name="my_profilee">My Profile</string>
     <string name="tickets">Tickets</string>
     <string name="logout">Sign Out</string>
+    <string name="prompt_old_password">Old Password</string>
+    <string name="prompt_new_password">New Password</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

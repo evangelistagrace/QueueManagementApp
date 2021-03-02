@@ -61,18 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long addUser (String email, String username, String password) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("email", email);
-        cv.put("username", username);
-        cv.put("password", password);
-        cv.put("is_admin", 0);
-        long res = db.insert(REGISTERED_USERS, null, cv);
-        db.close();
-        return res;
-    }
-
+    // ADMIN
     public long addAdmin (String email, String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -83,24 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long res = db.insert(REGISTERED_USERS, null, cv);
         db.close();
         return res;
-    }
-
-    public boolean checkUser(String username, String password) {
-        String[] columns = { COL_ID };
-        SQLiteDatabase db = getReadableDatabase();
-        String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?";
-        String[] selectionArgs = { username, password};
-        //SELECT {columns} FROM {table} WHERE {selection - insert ? for placholders} = {selectionargs - replaces placeholders in selection}
-        Cursor cursor = db.query(REGISTERED_USERS, columns, selection, selectionArgs, null, null, null);
-        int count = cursor.getCount();
-        cursor.close();
-        db.close();
-
-        if (count > 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public boolean checkAdmin(String username, String password) {
@@ -119,6 +90,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+
+
+    // CUSTOMER
+    public long addUser (String email, String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("email", email);
+        cv.put("username", username);
+        cv.put("password", password);
+        cv.put("is_admin", 0);
+        long res = db.insert(REGISTERED_USERS, null, cv);
+        db.close();
+        return res;
+    }
+
+    public int checkUser(String username, String password) {
+        int userId = -1;
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?";
+        String[] selectionArgs = { username, password};
+        //SELECT {columns} FROM {table} WHERE {selection - insert ? for placholders} = {selectionargs - replaces placeholders in selection}
+        Cursor cursor = db.rawQuery("SELECT " + COL_ID + " FROM " + REGISTERED_USERS + " WHERE " + selection, selectionArgs);
+
+        while (cursor.moveToNext()) {
+            userId = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return userId;
+    }
+
+    public long setUserPassword(int userId, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(userId) };
+
+        cv.put("password", newPassword);
+
+        long res = db.update(REGISTERED_USERS, cv, selection, selectionArgs);
+        db.close();
+        return res;
     }
 
     // SERVICES

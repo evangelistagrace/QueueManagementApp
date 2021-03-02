@@ -35,7 +35,8 @@ public class CustomerActivity extends AppCompatActivity {
     DatabaseHelper db;
     Customer customer;
     Intent currentIntent;
-    String username;
+    String username, password;
+    int id;
     ConstraintLayout constraintLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -59,7 +60,10 @@ public class CustomerActivity extends AppCompatActivity {
 
         //instantiate customer
         username = currentIntent.getStringExtra("USERNAME");
-        customer = new Customer(username);
+        password = currentIntent.getStringExtra("PASSWORD");
+        id = currentIntent.getIntExtra("ID", -1);
+
+        customer = new Customer(id, username, password);
 
         createNotificationChannel();
 
