@@ -1,33 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beige_200"
+    android:background="@drawable/gradient3"
     tools:context=".AdminProfileFragment">
 
-    <FrameLayout
-        android:id="@+id/el1"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/el2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/kollektif"
+        android:gravity="left"
+        android:text="@string/profile"
+        android:textColor="@color/white"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context=".AdminProfileFragment">
+        tools:context=".AdminProfileFragment" />
 
-        <TextView
-            android:layout_width="270dp"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/kollektif"
-            android:gravity="center"
-            android:text="@string/profile"
-            android:textColor="@color/indigo_700"
-            android:textSize="28sp" />
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/adminProfileImage"
+        android:layout_width="165dp"
+        android:layout_height="157dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/avatar2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/el2"
+        tools:context=".AdminProfileFragment" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/kollektif"
+        android:gravity="center"
+        android:text="Grace"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adminProfileImage"
+        tools:context=".AdminProfileFragment"/>
+
+    <LinearLayout
+        android:id="@+id/et_cust_old_password_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvUsername">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_cust_old_password_layout_ti"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_field_rounded_corner"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustOldPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:fontFamily="@font/kollektif"
+                android:hint="@string/prompt_old_password"
+                android:inputType="text|textPassword"
+                android:paddingTop="25dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/et_cust_new_password_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_cust_old_password_layout">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_cust_new_password_layout_ti"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_field_rounded_corner"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:fontFamily="@font/kollektif"
+                android:hint="@string/prompt_new_password"
+                android:inputType="text|textPassword"
+                android:paddingTop="25dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSaveChanges"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="@string/reset_password"
+        android:textSize="16sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_cust_new_password_layout"
+        tools:context=".AdminProfileFragment" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="@string/logout"
+        android:textSize="16sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveChanges"
+        tools:context=".AdminProfileFragment" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

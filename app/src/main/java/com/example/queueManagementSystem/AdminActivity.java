@@ -25,14 +25,22 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity);
 
+        //hide action bar
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();
+
         // init components
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         Button btnServices = findViewById(R.id.btnServices);
         Button btnQueues = findViewById(R.id.btnQueues);
         Button btnCustomers = findViewById(R.id.btnCustomers);
+        Intent currentIntent = getIntent();
+        int id = currentIntent.getIntExtra("ID", -1);
+        String username = currentIntent.getStringExtra("USERNAME");
+        String password = currentIntent.getStringExtra("PASSWORD");
+        Admin admin = new Admin(id, username, password);
 
-        toolbar = getSupportActionBar();
-        toolbar.setTitle("Admin Panel");
 
         // set actions for admin home menu
         // services
@@ -41,6 +49,7 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(AdminActivity.this, "SERVICES", Toast.LENGTH_SHORT).show();
                 Intent adminServicesIntent = new Intent(AdminActivity.this, AdminServicesActivity.class);
+                adminServicesIntent.putExtra("adminObject", admin);
                 startActivity(adminServicesIntent);
                 return;
             }
@@ -69,16 +78,14 @@ public class AdminActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.action_home:
-                        toolbar.setTitle("Home");
                         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         return true;
                     case R.id.action_tickets:
-                        toolbar.setTitle("Insight");
                         fragment = new AdminInsightFragment();
                         loadFragment(fragment);
                         return true;
                     case R.id.action_profile:
-                        toolbar.setTitle("Profile");
+                        currentIntent.putExtra("adminObject", admin);
                         fragment = new AdminProfileFragment();
                         loadFragment(fragment);
                         return true;

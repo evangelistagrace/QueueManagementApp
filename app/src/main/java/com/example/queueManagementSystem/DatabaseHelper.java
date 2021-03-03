@@ -74,22 +74,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean checkAdmin(String username, String password) {
-        String[] columns = { COL_ADMIN };
+    public int checkAdmin(String username, String password) {
+        int adminId = -1;
         SQLiteDatabase db = getReadableDatabase();
         String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?" + " and " + COL_ADMIN + "=" + 1;
         String[] selectionArgs = { username, password};
         //SELECT {columns} FROM {table} WHERE {selection - insert ? for placholders} = {selectionargs - replaces placeholders in selection}
-        Cursor cursor = db.query(REGISTERED_USERS, columns, selection, selectionArgs, null, null, null);
-        int count = cursor.getCount();
+        Cursor cursor = db.rawQuery("SELECT " + COL_ID + " FROM " + REGISTERED_USERS + " WHERE " + selection, selectionArgs);
+
+        while (cursor.moveToNext()) {
+            adminId = cursor.getInt(0);
+        }
+
         cursor.close();
         db.close();
 
-        if (count > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return adminId;
     }
 
 

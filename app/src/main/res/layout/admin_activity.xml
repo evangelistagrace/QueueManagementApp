@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/gradient3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,103 +12,116 @@
         android:id="@+id/admin_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/beige_200"
         tools:context=".AdminActivity">
 
-        <FrameLayout
+        <TextView
             android:id="@+id/el1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/kollektif"
+            android:gravity="left"
+            android:paddingLeft="40dp"
+            android:text="@string/admin_panel"
+            android:textColor="@color/white"
+            android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:context=".AdminActivity">
-
-            <TextView
-                android:layout_width="270dp"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/kollektif"
-                android:gravity="center"
-                android:text="@string/admin_panel"
-                android:textColor="@color/indigo_700"
-                android:textSize="28sp" />
-
-        </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/el2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/el1"
             app:layout_constraintVertical_bias="0.0"
-            tools:context=".AdminActivity">
+            tools:context=".CustomerHomeFragment">
 
-            <Button
-                android:id="@+id/btnServices"
-                android:layout_width="270dp"
-                android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/services"
-                android:textSize="16sp"
-                app:backgroundTint="@color/salmon_500" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CustomerServiceMenuLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <Button
+                    android:id="@+id/btnServices"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/semi_opaque_button"
+                    android:gravity="start"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Services"
+                    android:textColor="@color/magenta"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/white"
+                    app:elevation="10dp"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/magenta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnQueues"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/semi_opaque_button"
+                    android:gravity="start"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Queues"
+                    android:textColor="@color/magenta"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/white"
+                    app:elevation="10dp"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/magenta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnServices" />
+
+                <Button
+                    android:id="@+id/btnCustomers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/semi_opaque_button"
+                    android:gravity="start"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="Customers"
+                    android:textColor="@color/magenta"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/white"
+                    app:elevation="10dp"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/magenta"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnQueues" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/el3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/el2"
-            app:layout_constraintVertical_bias="0.0"
-            tools:context=".AdminActivity">
-
-            <Button
-                android:id="@+id/btnQueues"
-                android:layout_width="270dp"
-                android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/queues"
-                android:textSize="16sp"
-                app:backgroundTint="@color/salmon_500" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/el3"
-            app:layout_constraintVertical_bias="0.0"
-            tools:context=".AdminActivity">
-
-            <Button
-                android:id="@+id/btnCustomers"
-                android:layout_width="270dp"
-                android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/customers"
-                android:textSize="16sp"
-                app:backgroundTint="@color/salmon_500" />
-
-        </FrameLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -115,9 +129,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/indigo_700"
-        app:menu="@menu/admin_bottom_menu"
-        app:itemIconTint="@color/beige_200"
-        app:itemTextColor="@color/beige_200"
-        />
+        android:background="@color/beige_200"
+        app:itemIconSize="32dp"
+        app:itemIconTint="@color/magenta3"
+        app:itemTextColor="@color/purple_700"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/admin_bottom_menu" />
 </RelativeLayout>

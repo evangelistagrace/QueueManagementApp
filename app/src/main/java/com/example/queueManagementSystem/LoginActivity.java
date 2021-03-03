@@ -56,12 +56,14 @@ public class LoginActivity extends AppCompatActivity {
                 String username = et_cust_username.getText().toString().trim();
                 String password = et_cust_password.getText().toString().trim();
 
-                Boolean isAdmin = db.checkAdmin(username, password);
+                int adminId = db.checkAdmin(username, password);
                 int userId = db.checkUser(username, password);
 
-                if (isAdmin) {
-                    Toast.makeText(LoginActivity.this, "IS ADMIN", Toast.LENGTH_SHORT).show();
+                if (adminId > -1) {
                     Intent adminIntent = new Intent(LoginActivity.this, AdminActivity.class);
+                    adminIntent.putExtra("USERNAME", username);
+                    adminIntent.putExtra("PASSWORD", password);
+                    adminIntent.putExtra("ID", userId);
                     startActivity(adminIntent);
                     finish();
                     return;

@@ -22,4 +22,7 @@
     <color name="magenta3">#cd4c82</color>
     <color name="magenta_semi_opaque">#C8B03068</color>
     <color name="magenta_semi_opaque_200">#C1CD4C82</color>
+    <color name="dark_text">#808080</color>
+    <color name="dark_text_2">#666666</color>
+    <color name="mustard">#F8A94F</color>
 </resources>
