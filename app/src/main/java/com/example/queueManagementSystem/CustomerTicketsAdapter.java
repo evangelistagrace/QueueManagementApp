@@ -83,7 +83,7 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
             btnTicketView = itemView.findViewById(R.id.btnTicketView);
             btnTicketCancel = itemView.findViewById(R.id.btnTicketCancel);
 
-            btnTicketView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
         }
 

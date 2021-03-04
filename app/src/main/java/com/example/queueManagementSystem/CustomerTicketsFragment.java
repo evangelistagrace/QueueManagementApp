@@ -1,6 +1,7 @@
 package com.example.queueManagementSystem;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -113,41 +114,74 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         //view has to be clicked first
         // load ticket fragment
 
+//        Ticket ticket = tickets.get(position);
+//        Customer customer = ticket.getCustomer();
+//        QueueManager queueManager = ticket.getCounter().getQueueManager();
+//
+//        currentIntent.putExtra("ticketObject", ticket);
+//        currentIntent.putExtra("customerObject", customer);
+//        currentIntent.putExtra("queueManagerObject", queueManager);
+//
+//        Fragment fragment = new CustomerTicketFragment();
+//        loadFragment(fragment);
+
         Ticket ticket = tickets.get(position);
         Customer customer = ticket.getCustomer();
         QueueManager queueManager = ticket.getCounter().getQueueManager();
 
-        currentIntent.putExtra("ticketObject", ticket);
-        currentIntent.putExtra("customerObject", customer);
-        currentIntent.putExtra("queueManagerObject", queueManager);
+        //view ticket
+        view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        Fragment fragment = new CustomerTicketFragment();
-        loadFragment(fragment);
+                currentIntent.putExtra("ticketObject", ticket);
+                currentIntent.putExtra("customerObject", customer);
+                currentIntent.putExtra("queueManagerObject", queueManager);
 
-//        view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Ticket ticket = tickets.get(position);
-//                Customer customer = ticket.getCustomer();
-//                QueueManager queueManager = ticket.getCounter().getQueueManager();
-//
-//                currentIntent.putExtra("ticketObject", ticket);
-//                currentIntent.putExtra("customerObject", customer);
-//                currentIntent.putExtra("queueManagerObject", queueManager);
-//
-//                Fragment fragment = new CustomerTicketFragment();
-//                loadFragment(fragment);
-//            }
-//        });
-//
-//
-//        //todo: add cancel ticket handling here
-//        view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getActivity(), "View cancel " + tickets.get(position).getTicketNumber(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+                Fragment fragment = new CustomerTicketFragment();
+                loadFragment(fragment);
+            }
+        });
+
+
+        // cancel ticket
+        view.findViewById(R.id.btnTicketCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //try catch to gracefully get back to main activity
+                try {
+                    androidx.fragment.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+                    if (fm.getBackStackEntryCount() > 0) {
+                        // clear customer ticker first
+                        // clear only if the ticket is not currently being served
+                        if (queueManager.getCurrentServingTicket().getTicketNumber() != ticket.getTicketNumber()) {
+                            int index = 0;
+                            int customerTicketIndex = -1;
+                            for (Ticket customerTicket: customer.getTickets()) {
+                                if (customerTicket.getTicketNumber() == ticket.getTicketNumber()) {
+                                    customerTicketIndex = index;
+                                }
+                                index++;
+                            }
+
+                            if (customerTicketIndex > -1) {
+                                customer.getTickets().remove(customerTicketIndex);
+                            }
+
+                            ticket.setExpired(true);
+                        }
+
+                        Toast.makeText(getActivity(), "Ticket cancelled", Toast.LENGTH_SHORT).show();
+                        // close current fragment
+                        fm.popBackStack(null, 0);
+
+                    }
+                } catch (Exception err) {
+                    return;
+                }
+
+            }
+        });
 
 
     }
@@ -160,10 +194,5 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         transaction.commit();
     }
 
-//    @Override
-//    public void onBtnClick(Button btnTicketView, List<Ticket> tickets, int position) {
-//        Toast.makeText(getActivity(), "Btn " + btnTicketView.getId() + " for ticekt " + tickets.get(position), Toast.LENGTH_SHORT).show();
-//
-//    }
 
 }
