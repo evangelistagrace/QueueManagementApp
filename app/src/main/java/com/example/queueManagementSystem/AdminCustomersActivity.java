@@ -6,34 +6,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
-import android.graphics.fonts.Font;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Hashtable;
-
-public class AdminServicesActivity extends AppCompatActivity {
+public class AdminCustomersActivity extends AppCompatActivity {
     private ActionBar toolbar;
     DatabaseHelper db;
     Admin admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_services_activity);
+        setContentView(R.layout.admin_customers_activity);
 
         //hide action bar
         ActionBar actionBar = getSupportActionBar();
@@ -43,31 +35,18 @@ public class AdminServicesActivity extends AppCompatActivity {
         // init components
         db = new DatabaseHelper(this);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_services_navigation);
-        TextView tvAddService = findViewById(R.id.tvAddService);
         Intent currentIntent = getIntent();
         admin = (Admin) currentIntent.getSerializableExtra("adminObject");
 
-        tvAddService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment;
-                fragment = new AdminAddServiceFragment();
-                loadFragment(fragment);
-                return;
-            }
-        });
-
         // display services in table
-        Cursor cursor = db.getServices();
+        Cursor cursor = db.getUsers();
         TableLayout tl = (TableLayout) findViewById(R.id.adminServicesTableLayout);
-        Typeface font = FontCache.get("fonts/kollektif.ttf", this);
+        Typeface font = AdminServicesActivity.FontCache.get("fonts/kollektif.ttf", this);
         int counter = 1;
 
         if (cursor.moveToFirst()) {
             do {
-                int serviceId = cursor.getInt(0);
-                String serviceName = cursor.getString(1);
-                int isRunning = cursor.getInt(2);
+                String customerName = cursor.getString(1);
 
                 // Create a new row to be added.
                 TableRow tr = new TableRow(this);
@@ -90,10 +69,13 @@ public class AdminServicesActivity extends AppCompatActivity {
                 // create column 2
                 TextView col2 = new TextView(this);
 
-//                col1.setId(99 + 1);
                 col2.setTypeface(font);
                 col2.setPadding(30, 10, 10, 10);
-                col2.setText(serviceName);
+                col2.setText(customerName);
+                // todo: make customer clickable?
+                //android:clickable="true"
+                //android:focusable="true"
+                //set onclick listener to open AdminServiceSettingsFragment with clicked service
                 col2.setTextColor(getResources().getColor(R.color.magenta3));
                 col2.setTextSize(18);
 
@@ -102,35 +84,15 @@ public class AdminServicesActivity extends AppCompatActivity {
 
                 col3.setTypeface(font);
                 col3.setPadding(30, 10, 10, 10);
-
-                if (isRunning == 1) {
-                    col3.setText("Running");
-                } else {
-                    col3.setText("Stopped");
-                }
-
+                // todo: track number of ticket requests for customer
+                col3.setText("");
                 col3.setTextColor(getResources().getColor(R.color.dark_text_2));
                 col3.setTextSize(18);
 
-                // add columns to table row and make row clickable
+                // add columns to table row
                 tr.addView(col1);
                 tr.addView(col2);
                 tr.addView(col3);
-                tr.setId(serviceId);
-                tr.setClickable(true);
-                tr.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int serviceId = v.getId();
-
-                        // create service object and pass to fragment
-                        Fragment fragment;
-                        currentIntent.putExtra("serviceId", serviceId);
-                        fragment = new AdminServiceSettingsFragment();
-                        loadFragment(fragment);
-                        return;
-                    }
-                });
 
                 // add table row to table layout
                 tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
@@ -139,9 +101,6 @@ public class AdminServicesActivity extends AppCompatActivity {
 
             } while (cursor.moveToNext());
         }
-
-        cursor.close();
-        db.close();
 
         // set actions for bottom menu
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -174,24 +133,5 @@ public class AdminServicesActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.setReorderingAllowed(true);
         transaction.commit();
-    }
-
-    public static class FontCache {
-
-        private static Hashtable<String, Typeface> fontCache = new Hashtable<String, Typeface>();
-
-        public static Typeface get(String name, Context context) {
-            Typeface tf = fontCache.get(name);
-            if(tf == null) {
-                try {
-                    tf = Typeface.createFromAsset(context.getAssets(), name);
-                }
-                catch (Exception e) {
-                    return null;
-                }
-                fontCache.put(name, tf);
-            }
-            return tf;
-        }
     }
 }

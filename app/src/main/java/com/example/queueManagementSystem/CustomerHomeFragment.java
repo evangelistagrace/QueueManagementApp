@@ -113,14 +113,11 @@ public class CustomerHomeFragment extends Fragment {
 //        // instantiate and start counters
         for (Service service: services) {
             ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            // style button
             Button btn = new Button(getActivity());
             btn.setId(service.getServiceId());
             btn.setText(service.getServiceName());
-            btn.setEnabled(true);
-            btn.setBackground(getResources().getDrawable(R.drawable.semi_opaque_button));
-            btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
             btn.setTextSize(16);
-            btn.setTextColor(getResources().getColor(R.color.magenta3));
             btn.setPadding(
                     Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics())),
                     Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics())),
@@ -133,13 +130,12 @@ public class CustomerHomeFragment extends Fragment {
             btn.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_arrow_right), null);
             btn.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.magenta3)));
             btn.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()));
+            enableButton(btn);
 
-            // style button
             // add button to view
-            // add constraints
-            // add constraints to layout
             constraintLayout.addView(btn);
 
+            // add constraints
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(constraintLayout);
 
@@ -152,9 +148,16 @@ public class CustomerHomeFragment extends Fragment {
                 constraintSet.connect(btn.getId(),ConstraintSet.TOP,prevBtn.getId(),ConstraintSet.BOTTOM, 40);
             }
 
+            // add constraints to layout
             constraintSet.applyTo(constraintLayout);
 
             prevBtn = (Button) btn;
+
+            // disable button and and return early if service has been stopped/disabled
+            if (service.isRunning() == 0) {
+                disableButton(btn);
+                continue;
+            }
 
             // dynamically attach click listener
             btn.setOnClickListener(new View.OnClickListener() {
@@ -188,15 +191,11 @@ public class CustomerHomeFragment extends Fragment {
                 }
             });
 
+
             // disable ticket request btn for a service if there's already an active ticket for the service
             for (Ticket ticket: customer.getTickets()) {
                 if (ticket.getService().getServiceId() == btn.getId()) {
-                    btn.setBackgroundTintList(null);
-                    btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey_400)));
-                    btn.setTextColor(getResources().getColor(R.color.white));
-                    btn.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-                    btn.setEnabled(false);
-                    btn.setOnClickListener(null);
+                   disableButton(btn);
                 }
             }
 
@@ -244,5 +243,25 @@ public class CustomerHomeFragment extends Fragment {
 
     protected int getFragmentCount() {
         return getActivity().getSupportFragmentManager().getBackStackEntryCount();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    void enableButton(Button btn) {
+        btn.setEnabled(true);
+        btn.setBackground(getResources().getDrawable(R.drawable.semi_opaque_button));
+        btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        btn.setTextColor(getResources().getColor(R.color.magenta3));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    void disableButton(Button btn) {
+        btn.setBackgroundTintList(null);
+        btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey_400)));
+        btn.setTextColor(getResources().getColor(R.color.white));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            btn.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        }
+        btn.setEnabled(false);
+        btn.setOnClickListener(null);
     }
 }

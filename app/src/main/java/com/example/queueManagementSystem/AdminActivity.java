@@ -47,7 +47,6 @@ public class AdminActivity extends AppCompatActivity {
         btnServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminActivity.this, "SERVICES", Toast.LENGTH_SHORT).show();
                 Intent adminServicesIntent = new Intent(AdminActivity.this, AdminServicesActivity.class);
                 adminServicesIntent.putExtra("adminObject", admin);
                 startActivity(adminServicesIntent);
@@ -68,6 +67,10 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(AdminActivity.this, "CUSTOMERS", Toast.LENGTH_SHORT).show();
+                Intent adminServicesIntent = new Intent(AdminActivity.this, AdminCustomersActivity.class);
+                adminServicesIntent.putExtra("adminObject", admin);
+                startActivity(adminServicesIntent);
+                return;
             }
         });
 

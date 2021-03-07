@@ -1,12 +1,23 @@
 package com.example.queueManagementSystem;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +66,143 @@ public class AdminServiceSettingsFragment extends Fragment {
         }
     }
 
+    View view;
+    Intent currentIntent;
+    int serviceId, serviceRunning;
+    String serviceName;
+    DatabaseHelper db;
+    TextView tvServiceTitle;
+    EditText etServiceName;
+    Button btnSaveChanges, btnStopService, btnStartService, btnDeleteService;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.admin_service_settings_fragment, container, false);
+        view =  inflater.inflate(R.layout.admin_service_settings_fragment, container, false);
+
+        // init components
+        db = new DatabaseHelper(getActivity());
+        currentIntent = getActivity().getIntent();
+        serviceId = currentIntent.getIntExtra("serviceId", -1);
+        tvServiceTitle = view.findViewById(R.id.tvServiceSettingTitle);
+        etServiceName = view.findViewById(R.id.etServiceName);
+        btnSaveChanges = view.findViewById(R.id.btnSaveChanges);
+        btnStopService = view.findViewById(R.id.btnStopService);
+        btnStartService = view.findViewById(R.id.btnStartService);
+        btnDeleteService = view.findViewById(R.id.btnDeleteService);
+
+        //disable save button before any changes are made
+        btnSaveChanges.setEnabled(false);
+        disableSaveButton();
+
+        // get service name
+        Cursor cursor = db.getService(serviceId);
+
+        if (cursor.moveToFirst()) {
+            serviceName = cursor.getString(1);
+            serviceRunning = cursor.getInt(2);
+        }
+
+        // set page title to reflect service name
+        tvServiceTitle.setText("Service: " + serviceName);
+
+        //set form
+        etServiceName.setText(serviceName);
+
+        if (serviceRunning == 0) {
+            btnStartService.setVisibility(View.VISIBLE);
+            btnStopService.setVisibility(View.INVISIBLE);
+        } else {
+            btnStopService.setVisibility(View.VISIBLE);
+            btnStartService.setVisibility(View.INVISIBLE);
+        }
+
+        // save form changes
+        btnSaveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newServiceName = etServiceName.getText().toString().trim();
+                long res = db.setServiceName(serviceId, newServiceName);
+
+                if (res > 0) {
+                    Toast.makeText(getActivity(), "Successfully updated service", Toast.LENGTH_SHORT).show();
+
+                    //reset page
+                    tvServiceTitle.setText("Service: " + newServiceName);
+                    etServiceName.setText(newServiceName);
+                    disableSaveButton();
+                }
+            }
+        });
+
+        // handle stop service request
+        btnStopService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long res = db.setServiceRunning(serviceId, 0);
+
+                if (res > 0) {
+                    refreshActivity("update", serviceName);
+                }
+            }
+        });
+
+        // handle start service request
+        btnStartService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long res = db.setServiceRunning(serviceId, 1);
+
+                if (res > 0) {
+                    refreshActivity("update", serviceName);
+                }
+            }
+        });
+
+        // handle stop button request
+        btnDeleteService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long res = db.deleteService(serviceId);
+
+                if (res > 0) {
+                    refreshActivity("delete", serviceName);
+                }
+            }
+        });
+
+        return view;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void disableSaveButton() {
+        btnSaveChanges.setEnabled(false);
+        btnSaveChanges.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.grey_400)));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void enableSaveButton() {
+        btnSaveChanges.setEnabled(true);
+        btnSaveChanges.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.magenta)));
+    }
+
+    public void refreshActivity(String mode, String serviceName) {
+        String message = "";
+        if (mode == "update") {
+            message = "Successfully updated service " + serviceName;
+        } else if (mode == "delete") {
+            message = "Successfully deleted service " + serviceName;
+        }
+        androidx.fragment.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            // close current fragment
+            fm.popBackStack();
+            // refresh current activity
+            getActivity().finish();
+            startActivity(getActivity().getIntent());
+        }
     }
 }

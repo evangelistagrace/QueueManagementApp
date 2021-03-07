@@ -72,7 +72,7 @@ public class CustomerActivity extends AppCompatActivity {
 
         if (cursor.moveToFirst()) {
             do {
-                services.add(new Service(cursor.getInt(0), cursor.getString(1)));
+                services.add(new Service(cursor.getInt(0), cursor.getString(1), cursor.getInt(2)));
             } while (cursor.moveToNext());
         }
 

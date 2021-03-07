@@ -4,16 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Service implements Serializable {
-    int serviceId;
+    int serviceId, isRunning;
     String serviceName;
     ArrayList<Counter> counters;
     boolean countersStarted;
 
-    public Service(int serviceId, String serviceName) {
+    public Service(int serviceId, String serviceName, int isRunning) {
         this.serviceId = serviceId;
         this.serviceName = serviceName;
+        this.isRunning = isRunning;
         this.counters = new ArrayList<>();
         this.countersStarted = false;
+    }
+
+    public int isRunning() {
+        return isRunning;
     }
 
     public String getServiceName() {

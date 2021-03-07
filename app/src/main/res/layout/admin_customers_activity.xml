@@ -12,7 +12,7 @@
         android:id="@+id/admin_services_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".AdminServicesActivity">
+        tools:context=".AdminCustomersActivity">
 
         <TextView
             android:id="@+id/tvServiceSettingTitle"
@@ -22,7 +22,7 @@
             android:fontFamily="@font/kollektif"
             android:gravity="left"
             android:paddingLeft="40dp"
-            android:text="@string/services"
+            android:text="@string/customers"
             android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
                     android:id="@+id/adminServicesTableLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:stretchColumns="1, 2"
+                    android:stretchColumns="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +76,7 @@
                             android:padding="3dip"
                             android:paddingStart="10dip"
                             android:paddingLeft="10dip"
-                            android:text="Service Name"
+                            android:text="Name"
                             android:textColor="@color/beige_200"
                             android:textSize="18sp" />
 
@@ -85,36 +85,12 @@
                             android:padding="3dip"
                             android:paddingStart="10dip"
                             android:paddingLeft="10dip"
-                            android:text="Status"
+                            android:text="Requests"
                             android:textColor="@color/beige_200"
                             android:textSize="18sp" />
                     </TableRow>
 
                 </TableLayout>
-
-
-                <TextView
-                    android:id="@+id/tvAddService"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginBottom="40dp"
-                    android:background="@drawable/rounded_corner"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:fontFamily="@font/kollektif"
-                    android:gravity="center"
-                    android:paddingLeft="10sp"
-                    android:paddingTop="10sp"
-                    android:paddingRight="10sp"
-                    android:paddingBottom="10sp"
-                    android:text="@string/plus_symbol"
-                    android:textColor="@color/beige_200"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/servicesFragmentContent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>

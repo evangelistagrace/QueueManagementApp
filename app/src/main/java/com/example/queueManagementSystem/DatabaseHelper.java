@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //SERVICES
     public static final String TABLE_SERVICES = "services";
     public static final String COL_SERVICE_NAME = "SERVICE_NAME";
+    public static final String COL_SERVICE_RUNNING = "IS_RUNNING";
 
     //COUNTERS
     public static final String TABLE_COUNTERS = "counters";
@@ -45,7 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_SERVICES +
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_SERVICE_NAME + " TEXT" +
+                COL_SERVICE_NAME + " TEXT, " +
+                COL_SERVICE_RUNNING + " INTEGER" +
                 ")");
 
         db.execSQL("CREATE TABLE " + TABLE_COUNTERS +
@@ -137,11 +139,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public Cursor getUsers () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_ID, COL_USERNAME };
+        String selection = COL_ADMIN + "=" + 0;
+
+        Cursor cursor = db.query(REGISTERED_USERS, columns, selection, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
     // SERVICES
     public long addService (String serviceName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("service_name", serviceName);
+        cv.put("is_running", 1);
         long res = db.insert(TABLE_SERVICES, null, cv);
         db.close();
         return res;
@@ -149,15 +164,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getServices () {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = { COL_ID, COL_SERVICE_NAME };
-//        String selection = COL_USERNAME + "=?" + " and " + COL_PASSWORD + "=?" + " and " + COL_ADMIN + "=" + 1;
-//        String[] selectionArgs = { username, password};
+        String[] columns = { COL_ID, COL_SERVICE_NAME, COL_SERVICE_RUNNING};
 
         Cursor cursor = db.query(TABLE_SERVICES, columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
+    }
+
+    public Cursor getService (int serviceId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_ID, COL_SERVICE_NAME, COL_SERVICE_RUNNING};
+        String selection = COL_ID + "=" + serviceId;
+
+        Cursor cursor = db.query(TABLE_SERVICES, columns, selection, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public long setServiceName(int serviceId, String serviceName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(serviceId) };
+
+        cv.put("service_name", serviceName);
+
+        long res = db.update(TABLE_SERVICES, cv, selection, selectionArgs);
+        db.close();
+        return res;
+    }
+
+    public long setServiceRunning(int serviceId, int serviceRunning) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(serviceId) };
+
+        cv.put("is_running", serviceRunning);
+
+        long res = db.update(TABLE_SERVICES, cv, selection, selectionArgs);
+        db.close();
+        return res;
+    }
+
+    public long deleteService(int serviceId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(serviceId) };
+
+        long res = db.delete(TABLE_SERVICES, selection, selectionArgs);
+        db.close();
+        return res;
     }
 
 

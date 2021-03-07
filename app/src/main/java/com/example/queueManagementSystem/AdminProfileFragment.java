@@ -1,5 +1,6 @@
 package com.example.queueManagementSystem;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -101,9 +102,10 @@ public class AdminProfileFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Activity currentActivity = getActivity();
+                Intent intent = new Intent(currentActivity, LoginActivity.class);
                 startActivity(intent);
-                getActivity().finish();
+                currentActivity.finish();
             }
         });
 
@@ -123,6 +125,8 @@ public class AdminProfileFragment extends Fragment {
                     etCustNewPassword.setText("");
                     disableSaveButton();
                 }
+
+                db.close();
             }
         });
 

@@ -16,7 +16,7 @@
         tools:context=".AdminInsightFragment">
 
         <TextView
-            android:id="@+id/el1"
+            android:id="@+id/tvServiceSettingTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
@@ -42,7 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/el1"
+            app:layout_constraintTop_toBottomOf="@+id/tvServiceSettingTitle"
             app:layout_constraintVertical_bias="0.0"
             tools:context=".CustomerHomeFragment">
 
