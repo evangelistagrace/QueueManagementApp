@@ -120,29 +120,6 @@ public class CustomerActivity extends AppCompatActivity {
         return services;
     }
 
-    public void startCounters(Service service) {
-        ArrayList<Counter> counters;
-        // get services from db
-        Cursor cursor = db.getCounters(service.getServiceId());
-
-        // instantiate counters
-        if (cursor.moveToFirst()) {
-            do {
-                service.addCounter(new Counter(cursor.getInt(0), cursor.getString(1), true, service));
-
-            } while (cursor.moveToNext());
-        }
-
-        counters = service.getCounters();
-
-        // start counters
-        for (Counter counter: counters) {
-            if (counter.open()) {
-                counter.getQueueManager().run();
-            }
-        }
-    }
-
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

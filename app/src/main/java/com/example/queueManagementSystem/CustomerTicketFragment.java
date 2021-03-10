@@ -258,7 +258,7 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
 
-            notificationManager.notify(++notiId, builder.build());
+            notificationManager.notify(notiId, builder.build());
 
             prevMessage = message;
         }

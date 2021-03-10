@@ -90,7 +90,7 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
         @Override
         public void onClick(View view) {
             if (mClickListener != null) {
-                mClickListener.onItemClick(mData, getAdapterPosition());
+                mClickListener.onItemClick(view, mData, getAdapterPosition());
 //                mClickListener.onBtnClick(btnTicketView, mData, getAdapterPosition());
             }
         }
@@ -109,7 +109,7 @@ public class CustomerTicketsAdapter extends RecyclerView.Adapter<CustomerTickets
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(List<Ticket> tickets, int position);
+        void onItemClick(View view, List<Ticket> tickets, int position);
 //        void onBtnClick(Button btn, List<Ticket> tickets, int position);
     }
 }

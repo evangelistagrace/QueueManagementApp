@@ -110,7 +110,7 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
     }
 
     @Override
-    public void onItemClick(List<Ticket> tickets, int position) {
+    public void onItemClick(View view, List<Ticket> tickets, int position) {
         //view has to be clicked first
         // load ticket fragment
 
