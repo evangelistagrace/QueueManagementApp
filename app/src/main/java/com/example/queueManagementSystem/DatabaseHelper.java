@@ -28,6 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_COUNTERS = "counters";
     public static final String COL_COUNTER_NAME = "COUNTER_NAME";
     public static final String COL_SERVICE_ID = "SERVICE_ID";
+    public static final String COL_CURRENT_SERVING_TICKET = "CURRENT_SERVING_TICKET";
+    public static final String COL_REMAINING_IN_QUEUE = "REMAINING_IN_QUEUE";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB, null, 1);
@@ -53,7 +55,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_COUNTERS +
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_COUNTER_NAME + " TEXT, " +
-                COL_SERVICE_ID + " INTEGER" +
+                COL_SERVICE_ID + " INTEGER, " +
+                COL_CURRENT_SERVING_TICKET + " INTEGER, " +
+                COL_REMAINING_IN_QUEUE + " INTEGER" +
                 ")");
     }
 
@@ -228,6 +232,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put("counter_name", counterName);
         cv.put("service_id", serviceId);
+        cv.put("current_serving_ticket", 0);
+        cv.put("remaining_in_queue", 0);
         long res = db.insert(TABLE_COUNTERS, null, cv);
         db.close();
         return res;
