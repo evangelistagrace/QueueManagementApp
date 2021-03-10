@@ -228,7 +228,13 @@ public class CustomerHomeFragment extends Fragment {
         // start counters
         for (Counter counter: counters) {
             if (counter.open()) {
-                counter.getQueueManager().run();
+                counter.getQueueManager().run(getActivity());
+//                try {
+//                    Thread.sleep(1000); //wait until ticket get served
+//                } catch (InterruptedException ie) {
+//                    Thread.currentThread().interrupt();
+//                }
+//                Toast.makeText(getActivity(), counter.getCounterName() + " is currently serving ticket " + counter.getQueueManager().getCurrentServingTicket().getTicketNumber(), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -1,5 +1,8 @@
 package com.example.queueManagementSystem;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,12 +16,16 @@ public class QueueManager implements Serializable {
     Counter counter;
     Service service;
     Ticket currentServingTicket;
+    Context context;
+    DatabaseHelper db;
 
     public QueueManager(Counter counter, Service service) {
         this.tickets = new LinkedList<>();
         this.counter = counter;
         this.service = service;
         this.currentServingTicket = null;
+        this.context = null;
+        this.db = null;
     }
 
     public void generateTickets() {
@@ -137,7 +144,7 @@ public class QueueManager implements Serializable {
                     newTimer.schedule(new TicketHelper(this.queueManager), 0, period);
                 } else { //no more tickets left
                     System.out.println("~~ Finished serving all tickets for counter " + this.queueManager.counter.getId() + "~~");
-                    this.queueManager.run(); //gen new batch of tickets
+                    this.queueManager.run(this.queueManager.context); //gen new batch of tickets
                 }
 
                 oldTimer.cancel();
@@ -147,7 +154,9 @@ public class QueueManager implements Serializable {
     }
 
     // process that keeps on running
-    public void run() {
+    public void run(Context context) {
+        this.context = context;
+        this.db = new DatabaseHelper(this.context);
         this.generateTickets();
         System.out.println("~~Generated new batch of tickets for counter " + this.counter.getId() + " ~~");
         for (Ticket ticket : tickets) {
@@ -170,6 +179,7 @@ public class QueueManager implements Serializable {
     }
 
     public void setCurrentServingTicket(Ticket ticket) {
+//        Toast.makeText(this.context, this.counter.getCounterName() + " is currently serving " + ticket.getTicketNumber(), Toast.LENGTH_SHORT).show();
         this.currentServingTicket = ticket;
     }
 

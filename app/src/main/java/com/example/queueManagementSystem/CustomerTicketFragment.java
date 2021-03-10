@@ -215,12 +215,15 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
                             ticket.setExpired(true);
                         }
 
+                        Toast.makeText(getActivity(), "Ticket cancelled", Toast.LENGTH_SHORT).show();
                         // close current fragment
-                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        fm.popBackStack(null, 0);
+
                     }
                 } catch (Exception err) {
                     return;
                 }
+
             }
         });
 
