@@ -252,6 +252,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getAllCounters () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_ID, COL_COUNTER_NAME, COL_CURRENT_SERVING_TICKET, COL_REMAINING_IN_QUEUE};
+
+        Cursor cursor = db.query(TABLE_COUNTERS, columns, null, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public long setCurrentServingTicket(int counterId, int ticketNumber, int remainingInQueue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(counterId) };
+
+        cv.put("current_serving_ticket", ticketNumber);
+        cv.put("remaining_in_queue", remainingInQueue);
+
+        long res = db.update(TABLE_COUNTERS, cv, selection, selectionArgs);
+        db.close();
+        return res;
+    }
 
 
+//    public Cursor getCounters() {
+//    }
 }

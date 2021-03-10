@@ -15,23 +15,29 @@ public class QueueManager implements Serializable {
     Timer newTimer;
     Counter counter;
     Service service;
-    Ticket currentServingTicket;
+    Ticket currentServingTicket, lastTicketInQueue;
     Context context;
     DatabaseHelper db;
+    int remainingInQueue;
 
     public QueueManager(Counter counter, Service service) {
         this.tickets = new LinkedList<>();
         this.counter = counter;
         this.service = service;
         this.currentServingTicket = null;
+        this.lastTicketInQueue = null;
         this.context = null;
         this.db = null;
+        this.remainingInQueue = 0;
     }
 
     public void generateTickets() {
         int randomQNum = this.getRandomQueueNumber();
         for (int i=0; i<randomQNum; i++) {
             Ticket ticket = generateTicket();
+            if (i==randomQNum-1) {
+                this.lastTicketInQueue = ticket;
+            }
             this.tickets.add(ticket);
         }
     }
@@ -48,7 +54,9 @@ public class QueueManager implements Serializable {
         int counterNum = this.counter.getId();
         long lastTicketNumber = getLastTicketNumber();
         Long ticketNum = Long.parseLong(String.valueOf(counterNum*10) + String.valueOf(lastTicketNumber));
-        return new Ticket(ticketNum, this.service, this.counter, customer); //ticket created with random time interval assigned
+        Ticket customerTicket =  new Ticket(ticketNum, this.service, this.counter, customer); //ticket created with random time interval assigned
+        this.lastTicketInQueue = customerTicket;
+        return customerTicket;
     }
 
     public int getRandomQueueNumber() {
@@ -181,6 +189,12 @@ public class QueueManager implements Serializable {
     public void setCurrentServingTicket(Ticket ticket) {
 //        Toast.makeText(this.context, this.counter.getCounterName() + " is currently serving " + ticket.getTicketNumber(), Toast.LENGTH_SHORT).show();
         this.currentServingTicket = ticket;
+        this.remainingInQueue = (int)this.lastTicketInQueue.getTicketNumber() - (int)ticket.getTicketNumber();
+        long res = db.setCurrentServingTicket(this.counter.getId(), (int)ticket.getTicketNumber(), this.remainingInQueue);
+        db.close();
+        if (res > 0) {
+            System.out.println("REMAINING IN Q FOR COUNTER  " + this.counter.getId() + " IS " + this.remainingInQueue);
+        }
     }
 
 }

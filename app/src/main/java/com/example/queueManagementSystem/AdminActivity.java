@@ -58,7 +58,9 @@ public class AdminActivity extends AppCompatActivity {
         btnQueues.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminActivity.this, "QUEUES", Toast.LENGTH_SHORT).show();
+                currentIntent.putExtra("adminObject", admin);
+                Fragment fragment = new AdminQueuesFragment();
+                loadFragment(fragment);
             }
         });
 
