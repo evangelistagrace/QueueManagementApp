@@ -1,5 +1,6 @@
 package com.example.queueManagementSystem;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.anychart.APIlib;
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.charts.Pie;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +72,85 @@ public class AdminInsightFragment extends Fragment {
         }
     }
 
+    View view;
+    DatabaseHelper db;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.admin_insight_fragment, container, false);
+        view =  inflater.inflate(R.layout.admin_insight_fragment, container, false);
+
+        //init components
+        db = new DatabaseHelper(getActivity());
+
+        // display pie chart for services and the amount of requests received
+        AnyChartView anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view);
+        APIlib.getInstance().setActiveAnyChartView(anyChartView);
+        anyChartView.setProgressBar(view.findViewById(R.id.progress_bar));
+
+        Pie pie = AnyChart.pie();
+        pie.title("Percentage of ticket requests by service");
+
+        List<DataEntry> data = new ArrayList<>();
+        Cursor cursor = db.getServices();
+
+        if (cursor.moveToFirst()) {
+            do {
+                data.add(new ValueDataEntry(cursor.getString(1), cursor.getInt(3)));
+            } while (cursor.moveToNext());
+        }
+
+        pie.data(data);
+        pie.animation(true);
+        anyChartView.setChart(pie);
+
+
+        // display bar chart for frequent customers
+        AnyChartView anyChartView2 = view.findViewById(R.id.any_chart_view2);
+        APIlib.getInstance().setActiveAnyChartView(anyChartView2);
+
+        Cartesian cartesian = AnyChart.column();
+
+        List<DataEntry> data2 = new ArrayList<>();
+
+        Cursor cursor2 = db.getUsers();
+
+        if (cursor2.moveToFirst()) {
+            do {
+                if (cursor2.getInt(2) > 5) {
+                    String custName = cursor2.getString(1);
+                    int custRequests = cursor2.getInt(2);
+                    data2.add(new ValueDataEntry(custName, custRequests));
+                }
+            } while (cursor2.moveToNext());
+        }
+
+        Column column = cartesian.column(data2);
+
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("${%Value}{groupsSeparator: }");
+
+        cartesian.animation(true);
+        cartesian.title("Top 5 customers by ticket requests");
+
+        cartesian.yScale().minimum(0d);
+
+        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title("Customer");
+        cartesian.yAxis(0).title("No. of requests");
+
+        anyChartView2.setChart(cartesian);
+
+        return view;
     }
 }

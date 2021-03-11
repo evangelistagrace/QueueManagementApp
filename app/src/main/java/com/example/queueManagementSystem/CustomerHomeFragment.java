@@ -165,7 +165,7 @@ public class CustomerHomeFragment extends Fragment {
                 public void onClick(View v) {
                     // need to overwrite to pass service object and customer object to service queue options fragment
                     Fragment fragment;
-                    Ticket requestedTicket = customer.sendTicketRequest(customer, service.getServiceId()); //
+                    Ticket requestedTicket = customer.sendTicketRequest(customer, service.getServiceId(), getActivity()); //
                     QueueManager queueManager = null;
 
                     if (requestedTicket != null) {

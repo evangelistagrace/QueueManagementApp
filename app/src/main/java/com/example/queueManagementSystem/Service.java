@@ -1,5 +1,7 @@
 package com.example.queueManagementSystem;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -8,6 +10,7 @@ public class Service implements Serializable {
     String serviceName;
     ArrayList<Counter> counters;
     boolean countersStarted;
+    DatabaseHelper db;
 
     public Service(int serviceId, String serviceName, int isRunning) {
         this.serviceId = serviceId;
@@ -47,5 +50,10 @@ public class Service implements Serializable {
 
     public boolean getCountersStarted() {
         return this.countersStarted;
+    }
+
+    public void incrementRequest(int serviceId, Context context) {
+        db = new DatabaseHelper(context);
+        db.incrementServiceRequest(serviceId);
     }
 }

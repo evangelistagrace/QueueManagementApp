@@ -84,39 +84,6 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/et_num_counters_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_service_name_layout">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/et_num_counters_layout_ti"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/input_field_rounded_corner"
-                        app:boxBackgroundMode="filled"
-                        app:boxStrokeWidth="0dp"
-                        app:boxStrokeWidthFocused="0dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etNumOfCounters"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/transparent"
-                            android:fontFamily="@font/kollektif"
-                            android:hint="@string/num_of_counters"
-                            android:inputType="number"
-                            android:paddingTop="25dp"
-                            android:text="2" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
                 <Button
                     android:id="@+id/btnSaveChanges"
                     android:layout_width="0dp"
@@ -131,7 +98,7 @@
                     app:iconGravity="textStart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_num_counters_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/et_service_name_layout"
                     tools:context=".AdminServicesActivity" />
 
                 <Button

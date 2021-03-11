@@ -47,6 +47,7 @@ public class AdminCustomersActivity extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             do {
                 String customerName = cursor.getString(1);
+                int customerRequests = cursor.getInt(2);
 
                 // Create a new row to be added.
                 TableRow tr = new TableRow(this);
@@ -72,10 +73,6 @@ public class AdminCustomersActivity extends AppCompatActivity {
                 col2.setTypeface(font);
                 col2.setPadding(30, 10, 10, 10);
                 col2.setText(customerName);
-                // todo: make customer clickable?
-                //android:clickable="true"
-                //android:focusable="true"
-                //set onclick listener to open AdminServiceSettingsFragment with clicked service
                 col2.setTextColor(getResources().getColor(R.color.magenta3));
                 col2.setTextSize(18);
 
@@ -84,8 +81,7 @@ public class AdminCustomersActivity extends AppCompatActivity {
 
                 col3.setTypeface(font);
                 col3.setPadding(30, 10, 10, 10);
-                // todo: track number of ticket requests for customer
-                col3.setText("");
+                col3.setText(String.valueOf(customerRequests));
                 col3.setTextColor(getResources().getColor(R.color.dark_text_2));
                 col3.setTextSize(18);
 

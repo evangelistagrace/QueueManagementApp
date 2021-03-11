@@ -86,6 +86,7 @@ public class AdminActivity extends AppCompatActivity {
                         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         return true;
                     case R.id.action_tickets:
+                        currentIntent.putExtra("adminObject", admin);
                         fragment = new AdminInsightFragment();
                         loadFragment(fragment);
                         return true;

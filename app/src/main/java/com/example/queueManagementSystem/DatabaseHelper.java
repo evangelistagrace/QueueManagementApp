@@ -18,11 +18,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USERNAME = "USERNAME";
     public static final String COL_PASSWORD = "PASSWORD";
     public static final String COL_ADMIN = "IS_ADMIN";
+    public static final String COL_REQUESTS = "REQUESTS";
 
     //SERVICES
     public static final String TABLE_SERVICES = "services";
     public static final String COL_SERVICE_NAME = "SERVICE_NAME";
     public static final String COL_SERVICE_RUNNING = "IS_RUNNING";
+    public static final String COL_SERVICE_REQUESTS = "SERVICE_REQUESTS";
 
     //COUNTERS
     public static final String TABLE_COUNTERS = "counters";
@@ -30,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_SERVICE_ID = "SERVICE_ID";
     public static final String COL_CURRENT_SERVING_TICKET = "CURRENT_SERVING_TICKET";
     public static final String COL_REMAINING_IN_QUEUE = "REMAINING_IN_QUEUE";
+    public static final String COL_COUNTER_OPENED = "IS_OPENED";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB, null, 1);
@@ -43,13 +46,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_EMAIL + " TEXT, " +
                 COL_USERNAME + " TEXT, " +
                 COL_PASSWORD + " TEXT, " +
-                COL_ADMIN + " INTEGER" +
+                COL_ADMIN + " INTEGER, " +
+                COL_REQUESTS + " INTEGER" +
                 ")");
 
         db.execSQL("CREATE TABLE " + TABLE_SERVICES +
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_SERVICE_NAME + " TEXT, " +
-                COL_SERVICE_RUNNING + " INTEGER" +
+                COL_SERVICE_RUNNING + " INTEGER, " +
+                COL_SERVICE_REQUESTS + " INTEGER" +
                 ")");
 
         db.execSQL("CREATE TABLE " + TABLE_COUNTERS +
@@ -57,7 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_COUNTER_NAME + " TEXT, " +
                 COL_SERVICE_ID + " INTEGER, " +
                 COL_CURRENT_SERVING_TICKET + " INTEGER, " +
-                COL_REMAINING_IN_QUEUE + " INTEGER" +
+                COL_REMAINING_IN_QUEUE + " INTEGER, " +
+                COL_COUNTER_OPENED + " INTEGER" +
                 ")");
     }
 
@@ -75,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("username", username);
         cv.put("password", password);
         cv.put("is_admin", 1);
+        cv.put("requests", 0);
         long res = db.insert(REGISTERED_USERS, null, cv);
         db.close();
         return res;
@@ -107,6 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("username", username);
         cv.put("password", password);
         cv.put("is_admin", 0);
+        cv.put("requests", 0);
         long res = db.insert(REGISTERED_USERS, null, cv);
         db.close();
         return res;
@@ -145,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getUsers () {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = { COL_ID, COL_USERNAME };
+        String[] columns = { COL_ID, COL_USERNAME, COL_REQUESTS };
         String selection = COL_ADMIN + "=" + 0;
 
         Cursor cursor = db.query(REGISTERED_USERS, columns, selection, null, null, null, null);
@@ -155,12 +163,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public long incrementCustomerRequest(int userId) {
+        //get previous request value first
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_REQUESTS };
+        String selection = COL_ID + "=" + userId;
+        int numOfRequests = 0;
+
+        Cursor cursor = db.query(REGISTERED_USERS, columns, selection, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            numOfRequests = cursor.getInt(0);
+        }
+
+        //increment for each call
+        ++numOfRequests;
+
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("requests", numOfRequests);
+
+        long res = db.update(REGISTERED_USERS, cv, selection, null);
+        db.close();
+        return res;
+    }
+
     // SERVICES
     public long addService (String serviceName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("service_name", serviceName);
         cv.put("is_running", 1);
+        cv.put("service_requests", 0);
         long res = db.insert(TABLE_SERVICES, null, cv);
         db.close();
         return res;
@@ -168,7 +202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getServices () {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = { COL_ID, COL_SERVICE_NAME, COL_SERVICE_RUNNING};
+        String[] columns = { COL_ID, COL_SERVICE_NAME, COL_SERVICE_RUNNING, COL_SERVICE_REQUESTS};
 
         Cursor cursor = db.query(TABLE_SERVICES, columns, null, null, null, null, null);
         if (cursor != null) {
@@ -211,6 +245,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("is_running", serviceRunning);
 
         long res = db.update(TABLE_SERVICES, cv, selection, selectionArgs);
+
+        if (res > 0) {
+            // also search counters table and set service counters to closed
+            Cursor cursor = this.getCounters(serviceId);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    if (serviceRunning == 0) {
+                        this.setCounterOpen(cursor.getInt(0), 0);
+                    } else {
+                        this.setCounterOpen(cursor.getInt(0), 1);
+                    }
+                } while (cursor.moveToNext());
+            }
+        }
+
         db.close();
         return res;
     }
@@ -225,6 +275,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public long incrementServiceRequest(int serviceId) {
+        //get previous request value first
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_SERVICE_REQUESTS };
+        String selection = COL_ID + "=" + serviceId;
+        int numOfServiceRequests = 0;
+
+        Cursor cursor = db.query(TABLE_SERVICES, columns, selection, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            numOfServiceRequests = cursor.getInt(0);
+        }
+
+        //increment for each call
+        ++numOfServiceRequests;
+
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("service_requests", numOfServiceRequests);
+
+        long res = db.update(TABLE_SERVICES, cv, selection, null);
+        db.close();
+        return res;
+    }
+
 
     // COUNTERS
     public long addCounter (String counterName, Integer serviceId) {
@@ -234,6 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("service_id", serviceId);
         cv.put("current_serving_ticket", 0);
         cv.put("remaining_in_queue", 0);
+        cv.put("is_opened", 1);
         long res = db.insert(TABLE_COUNTERS, null, cv);
         db.close();
         return res;
@@ -255,12 +331,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllCounters () {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = { COL_ID, COL_COUNTER_NAME, COL_CURRENT_SERVING_TICKET, COL_REMAINING_IN_QUEUE};
+        String selection = COL_COUNTER_OPENED + "=" + 1;
 
-        Cursor cursor = db.query(TABLE_COUNTERS, columns, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_COUNTERS, columns, selection, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
+    }
+
+    public long setCounterOpen(int counterId, int isOpened) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String selection = COL_ID + "=?";
+        String[] selectionArgs = { String.valueOf(counterId) };
+
+        cv.put("is_opened", isOpened);
+
+        long res = db.update(TABLE_COUNTERS, cv, selection, selectionArgs);
+
+        db.close();
+        return res;
     }
 
     public long setCurrentServingTicket(int counterId, int ticketNumber, int remainingInQueue) {
@@ -277,7 +368,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-
-//    public Cursor getCounters() {
-//    }
 }

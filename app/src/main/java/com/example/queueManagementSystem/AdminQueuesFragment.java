@@ -146,9 +146,9 @@ public class AdminQueuesFragment extends Fragment {
         TableRow tr = new TableRow(getActivity());
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         if (counter % 2 == 0) { //odd row
-            tr.setBackgroundColor(getResources().getColor(R.color.semi_white));
-        } else { //even row
             tr.setBackgroundColor(getResources().getColor(R.color.beige_200));
+        } else { //even row
+            tr.setBackgroundColor(getResources().getColor(R.color.semi_white));
         }
 
         // create column 1
@@ -212,7 +212,7 @@ public class AdminQueuesFragment extends Fragment {
 
         col1.setTypeface(font);
         col1.setPadding(30, 10, 10, 10);
-        col1.setText("No.");
+        col1.setText("ID");
         col1.setTextColor(getResources().getColor(R.color.beige_200));
         col1.setTextSize(18);
 
@@ -231,7 +231,6 @@ public class AdminQueuesFragment extends Fragment {
 
         col3.setTypeface(font);
         col3.setPadding(30, 10, 10, 10);
-        // todo: update current serving ticket number real-time
         col3.setText("Serving");
         col3.setTextColor(getResources().getColor(R.color.beige_200));
         col3.setTextSize(18);
@@ -241,7 +240,6 @@ public class AdminQueuesFragment extends Fragment {
 
         col4.setTypeface(font);
         col4.setPadding(30, 10, 10, 10);
-        // todo: update current serving ticket number real-time
         col4.setText("Remaining");
         col4.setTextColor(getResources().getColor(R.color.beige_200));
         col4.setTextSize(18);
