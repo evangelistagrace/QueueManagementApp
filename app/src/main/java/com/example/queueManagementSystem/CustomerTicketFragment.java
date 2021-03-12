@@ -3,6 +3,9 @@ package com.example.queueManagementSystem;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
@@ -253,6 +256,11 @@ public class CustomerTicketFragment<ServiceHandler> extends Fragment {
     private void sendNotification(String title, String message) {
         //send noti only if it hasn't been sent yet
         if (prevMessage != message) {
+            Uri alarmSound =
+                    RingtoneManager. getDefaultUri (RingtoneManager. TYPE_NOTIFICATION );
+            MediaPlayer mp = MediaPlayer. create (getActivity().getApplicationContext(), alarmSound);
+            mp.start();
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_ticket)
                     .setContentTitle(title)
