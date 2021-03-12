@@ -94,7 +94,6 @@ public class AdminServiceSettingsFragment extends Fragment {
         btnDeleteService = view.findViewById(R.id.btnDeleteService);
 
         //disable save button before any changes are made
-        btnSaveChanges.setEnabled(false);
         disableSaveButton();
 
         // get service name
@@ -110,6 +109,8 @@ public class AdminServiceSettingsFragment extends Fragment {
 
         //set form
         etServiceName.setText(serviceName);
+
+       etServiceName.addTextChangedListener(etServiceNameWatcher);
 
         if (serviceRunning == 0) {
             btnStartService.setVisibility(View.VISIBLE);
@@ -175,6 +176,35 @@ public class AdminServiceSettingsFragment extends Fragment {
 
         return view;
     }
+
+    private TextWatcher etServiceNameWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void afterTextChanged(Editable s) {
+            // detect if new service name is equal to current service name
+            String newServiceName = (String) s.toString();
+            if (newServiceName.equals(serviceName)) {
+                if (btnSaveChanges.isEnabled()) {
+                    disableSaveButton();
+                }
+            } else {
+                if (!btnSaveChanges.isEnabled()) {
+                    enableSaveButton();
+                }
+            }
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void disableSaveButton() {
