@@ -163,6 +163,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getTopCustomers () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_ID, COL_USERNAME, COL_REQUESTS };
+        String selection = COL_ADMIN + "=" + 0 + " and " + COL_REQUESTS + " > " + 3;
+
+        Cursor cursor = db.query(REGISTERED_USERS, columns, selection, null, null, null, COL_REQUESTS);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
     public long incrementCustomerRequest(int userId) {
         //get previous request value first
         SQLiteDatabase db = this.getReadableDatabase();

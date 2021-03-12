@@ -114,16 +114,17 @@ public class AdminInsightFragment extends Fragment {
 
         List<DataEntry> data2 = new ArrayList<>();
 
-        Cursor cursor2 = db.getUsers();
+        Cursor cursor2 = db.getTopCustomers();
+        int count = 0;
 
+        //limit to top 5 customers
         if (cursor2.moveToFirst()) {
             do {
-                if (cursor2.getInt(2) > 5) {
-                    String custName = cursor2.getString(1);
-                    int custRequests = cursor2.getInt(2);
-                    data2.add(new ValueDataEntry(custName, custRequests));
-                }
-            } while (cursor2.moveToNext());
+                String custName = cursor2.getString(1);
+                int custRequests = cursor2.getInt(2);
+                data2.add(new ValueDataEntry(custName, custRequests));
+                count++;
+            } while (cursor2.moveToNext() && count < 5);
         }
 
         Column column = cartesian.column(data2);
@@ -134,7 +135,7 @@ public class AdminInsightFragment extends Fragment {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0d)
                 .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
+                .format("{%Value}{groupsSeparator: }");
 
         cartesian.animation(true);
         cartesian.title("Top 5 customers by ticket requests");
