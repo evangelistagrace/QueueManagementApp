@@ -133,7 +133,6 @@ public class CustomerTicketsFragment extends Fragment implements CustomerTickets
         view.findViewById(R.id.btnTicketView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 currentIntent.putExtra("ticketObject", ticket);
                 currentIntent.putExtra("customerObject", customer);
                 currentIntent.putExtra("queueManagerObject", queueManager);

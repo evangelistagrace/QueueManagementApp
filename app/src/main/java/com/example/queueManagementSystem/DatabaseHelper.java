@@ -30,7 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_COUNTERS = "counters";
     public static final String COL_COUNTER_NAME = "COUNTER_NAME";
     public static final String COL_SERVICE_ID = "SERVICE_ID";
-    public static final String COL_CURRENT_SERVING_TICKET = "CURRENT_SERVING_TICKET";
+    public static final String COL_CURRENT_SERVING_TICKET_NUMBER = "CURRENT_SERVING_TICKET_NUMBER";
+    public static final String COL_CURRENT_SERVING_TICKET_TIME = "CURRENT_SERVING_TICKET_TIME";
     public static final String COL_REMAINING_IN_QUEUE = "REMAINING_IN_QUEUE";
     public static final String COL_COUNTER_OPENED = "IS_OPENED";
 
@@ -61,7 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_COUNTER_NAME + " TEXT, " +
                 COL_SERVICE_ID + " INTEGER, " +
-                COL_CURRENT_SERVING_TICKET + " INTEGER, " +
+                COL_CURRENT_SERVING_TICKET_NUMBER + " INTEGER, " +
+                COL_CURRENT_SERVING_TICKET_TIME + " INTEGER, " +
                 COL_REMAINING_IN_QUEUE + " INTEGER, " +
                 COL_COUNTER_OPENED + " INTEGER" +
                 ")");
@@ -319,7 +321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put("counter_name", counterName);
         cv.put("service_id", serviceId);
-        cv.put("current_serving_ticket", 0);
+        cv.put("current_serving_ticket_number", 0);
+        cv.put("current_serving_ticket_time", 0);
         cv.put("remaining_in_queue", 0);
         cv.put("is_opened", 1);
         long res = db.insert(TABLE_COUNTERS, null, cv);
@@ -342,10 +345,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllCounters () {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = { COL_ID, COL_COUNTER_NAME, COL_CURRENT_SERVING_TICKET, COL_REMAINING_IN_QUEUE};
+        String[] columns = { COL_ID, COL_COUNTER_NAME, COL_CURRENT_SERVING_TICKET_NUMBER, COL_REMAINING_IN_QUEUE};
         String selection = COL_COUNTER_OPENED + "=" + 1;
 
         Cursor cursor = db.query(TABLE_COUNTERS, columns, selection, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getServingTime () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = { COL_CURRENT_SERVING_TICKET_TIME };
+        String selection = COL_COUNTER_OPENED + "=" + 1;
+
+        Cursor cursor = db.query(TABLE_COUNTERS, columns, selection, null, null, null, null, "1");
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -366,13 +381,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public long setCurrentServingTicket(int counterId, int ticketNumber, int remainingInQueue) {
+    public long setCurrentServingTicket(int counterId, int ticketNumber, int ticketTime, int remainingInQueue) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         String selection = COL_ID + "=?";
         String[] selectionArgs = { String.valueOf(counterId) };
 
-        cv.put("current_serving_ticket", ticketNumber);
+        cv.put("current_serving_ticket_number", ticketNumber);
+        cv.put("current_serving_ticket_time", ticketTime);
         cv.put("remaining_in_queue", remainingInQueue);
 
         long res = db.update(TABLE_COUNTERS, cv, selection, selectionArgs);

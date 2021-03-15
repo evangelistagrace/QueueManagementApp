@@ -17,11 +17,17 @@ import com.anychart.charts.Cartesian;
 import com.anychart.charts.Pie;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.core.cartesian.series.Column;
+import com.anychart.core.cartesian.series.Line;
+import com.anychart.data.Mapping;
+import com.anychart.data.Set;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
+import com.anychart.enums.MarkerType;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
+import com.anychart.graphics.vector.Stroke;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +80,7 @@ public class AdminInsightFragment extends Fragment {
 
     View view;
     DatabaseHelper db;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +91,8 @@ public class AdminInsightFragment extends Fragment {
         //init components
         db = new DatabaseHelper(getActivity());
 
+
+        // FIRST CHART
         // display pie chart for services and the amount of requests received
         AnyChartView anyChartView = (AnyChartView) view.findViewById(R.id.any_chart_view);
         APIlib.getInstance().setActiveAnyChartView(anyChartView);
@@ -106,30 +115,88 @@ public class AdminInsightFragment extends Fragment {
         anyChartView.setChart(pie);
 
 
-        // display bar chart for frequent customers
+
+        // SEOND CHART
+        // display average waiating time of customers
         AnyChartView anyChartView2 = view.findViewById(R.id.any_chart_view2);
         APIlib.getInstance().setActiveAnyChartView(anyChartView2);
+        anyChartView2.setProgressBar(view.findViewById(R.id.progress_bar2));
 
-        Cartesian cartesian = AnyChart.column();
+        Cartesian cartesian = AnyChart.line();
 
-        List<DataEntry> data2 = new ArrayList<>();
+        cartesian.animation(true);
 
-        Cursor cursor2 = db.getTopCustomers();
-        int count = 0;
+        cartesian.padding(10d, 20d, 5d, 20d);
 
-        //limit to top 5 customers
-        if (cursor2.moveToFirst()) {
-            do {
-                String custName = cursor2.getString(1);
-                int custRequests = cursor2.getInt(2);
-                data2.add(new ValueDataEntry(custName, custRequests));
-                count++;
-            } while (cursor2.moveToNext() && count < 5);
+        cartesian.crosshair().enabled(true);
+        cartesian.crosshair()
+                .yLabel(true)
+                // TODO ystroke
+                .yStroke((Stroke) null, null, null, (String) null, (String) null);
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+
+        cartesian.title("Average Waiting Time");
+
+        cartesian.yAxis(0).title("Avg. Waiting Time (minutes)");
+        cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
+
+        List<DataEntry> seriesData = new ArrayList<>();
+        ArrayList<Double> dataSet = AdminActivity.getAvgServingTimeArr();
+
+        for (int i=0; i< dataSet.size(); i++) {
+            String val = df2.format(dataSet.get(i));
+            seriesData.add(new CustomDataEntry(String.valueOf(i), Double.parseDouble(val), null, null));
         }
 
-        Column column = cartesian.column(data2);
+        Set set = Set.instantiate();
+        set.data(seriesData);
+        Mapping series1Mapping = set.mapAs("{ x: 'x', value: 'value' }");
 
-        column.tooltip()
+
+        Line series1 = cartesian.line(series1Mapping);
+        series1.hovered().markers().enabled(true);
+        series1.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4d);
+        series1.tooltip()
+                .position("right")
+                .anchor(Anchor.LEFT_CENTER)
+                .offsetX(5d)
+                .offsetY(5d);
+
+        cartesian.legend().enabled(false);
+        cartesian.legend().fontSize(13d);
+        cartesian.legend().padding(0d, 0d, 10d, 0d);
+
+        anyChartView2.setChart(cartesian);
+
+
+        //THIRD CHART
+        // display bar chart for frequent customers
+        AnyChartView anyChartView3 = view.findViewById(R.id.any_chart_view3);
+        APIlib.getInstance().setActiveAnyChartView(anyChartView3);
+
+        Cartesian cartesian2 = AnyChart.column();
+
+        List<DataEntry> data3 = new ArrayList<>();
+
+        Cursor cursor3 = db.getTopCustomers();
+        int count2 = 0;
+
+        //limit to top 5 customers
+        if (cursor3.moveToFirst()) {
+            do {
+                String custName = cursor3.getString(1);
+                int custRequests = cursor3.getInt(2);
+                data3.add(new ValueDataEntry(custName, custRequests));
+                count2++;
+            } while (cursor3.moveToNext() && count2 < 5);
+        }
+
+        Column column2 = cartesian2.column(data3);
+
+        column2.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
                 .anchor(Anchor.CENTER_BOTTOM)
@@ -137,21 +204,31 @@ public class AdminInsightFragment extends Fragment {
                 .offsetY(5d)
                 .format("{%Value}{groupsSeparator: }");
 
-        cartesian.animation(true);
-        cartesian.title("Top 5 customers by ticket requests");
+        cartesian2.animation(true);
+        cartesian2.title("Top 5 customers by ticket requests");
 
-        cartesian.yScale().minimum(0d);
+        cartesian2.yScale().minimum(0d);
 
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
+        cartesian2.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
 
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+        cartesian2.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian2.interactivity().hoverMode(HoverMode.BY_X);
 
-        cartesian.xAxis(0).title("Customer");
-        cartesian.yAxis(0).title("No. of requests");
+        cartesian2.xAxis(0).title("Customer");
+        cartesian2.yAxis(0).title("No. of requests");
 
-        anyChartView2.setChart(cartesian);
+        anyChartView3.setChart(cartesian2);
 
         return view;
+    }
+
+    private class CustomDataEntry extends ValueDataEntry {
+
+        CustomDataEntry(String x, Number value, Number value2, Number value3) {
+            super(x, value);
+            setValue("value2", value2);
+            setValue("value3", value3);
+        }
+
     }
 }

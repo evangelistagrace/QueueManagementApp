@@ -190,7 +190,7 @@ public class QueueManager implements Serializable {
 //        Toast.makeText(this.context, this.counter.getCounterName() + " is currently serving " + ticket.getTicketNumber(), Toast.LENGTH_SHORT).show();
         this.currentServingTicket = ticket;
         this.remainingInQueue = (int)this.lastTicketInQueue.getTicketNumber() - (int)ticket.getTicketNumber();
-        long res = db.setCurrentServingTicket(this.counter.getId(), (int)ticket.getTicketNumber(), this.remainingInQueue);
+        long res = db.setCurrentServingTicket(this.counter.getId(), (int)ticket.getTicketNumber(), (int)ticket.getRandomTimeInterval(), this.remainingInQueue);
         db.close();
         if (res > 0) {
             System.out.println("REMAINING IN Q FOR COUNTER  " + this.counter.getId() + " IS " + this.remainingInQueue);
