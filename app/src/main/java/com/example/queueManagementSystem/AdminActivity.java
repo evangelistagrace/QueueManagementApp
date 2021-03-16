@@ -200,6 +200,18 @@ public class AdminActivity extends AppCompatActivity {
                         currArr = arrServingTime4;
                         prevArr = arrServingTime3;
                         break;
+                    case 5:
+                        currArr = arrServingTime5;
+                        prevArr = arrServingTime4;
+                        break;
+                    case 6:
+                        currArr = arrServingTime6;
+                        prevArr = arrServingTime5;
+                        break;
+                    case 7:
+                        currArr = arrServingTime7;
+                        prevArr = arrServingTime6;
+                        break;
                     case 8:
                         currArr = arrServingTime8;
                         prevArr = arrServingTime7;
@@ -249,7 +261,7 @@ public class AdminActivity extends AppCompatActivity {
                             servingTime = cursor.getInt(0);
                         }
                         cursor.close();
-                        Toast.makeText(AdminActivity.this, "current ticket serving time: " + servingTime, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(AdminActivity.this, "current ticket serving time: " + servingTime, Toast.LENGTH_SHORT).show();
                         currArr.add(servingTime);
                     }
                 }, delay);
